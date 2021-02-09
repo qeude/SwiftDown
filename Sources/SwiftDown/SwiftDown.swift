@@ -8,30 +8,30 @@
 #if os(macOS)
   import AppKit
 
-  typealias SystemFontAlias = NSFont
-  typealias SystemColorAlias = NSColor
-  typealias SymbolicTraits = NSFontDescriptor.SymbolicTraits
+  public typealias SystemFontAlias = NSFont
+  public typealias SystemColorAlias = NSColor
+  public typealias SymbolicTraits = NSFontDescriptor.SymbolicTraits
 
   let defaultEditorFont = NSFont.systemFont(ofSize: NSFont.systemFontSize)
   let defaultEditorTextColor = NSColor.labelColor
 #elseif os(iOS)
   import UIKit
 
-  typealias SystemFontAlias = UIFont
-  typealias SystemColorAlias = UIColor
-  typealias SymbolicTraits = UIFontDescriptor.SymbolicTraits
+  public typealias SystemFontAlias = UIFont
+  public typealias SystemColorAlias = UIColor
+  public typealias SymbolicTraits = UIFontDescriptor.SymbolicTraits
 
   let defaultEditorFont = UIFont.preferredFont(forTextStyle: .body)
   let defaultEditorTextColor = UIColor.label
 #endif
 
-struct SwiftDown {
+public struct SwiftDown {
   private var font: SystemFontAlias
   private var fontColor: SystemColorAlias
 
   private var rules: [SwiftDownRule]
 
-  init() {
+  public init() {
     self.init(font: defaultEditorFont, fontColor: defaultEditorTextColor)
   }
 
@@ -39,10 +39,9 @@ struct SwiftDown {
     self.font = font ?? defaultEditorFont
     self.fontColor = fontColor ?? defaultEditorTextColor
     self.rules = SwiftDownRules(font: self.font).rules
-    print("toto")
   }
 
-  func getFormattedText(from string: String) -> NSMutableAttributedString {
+  public func getFormattedText(from string: String) -> NSMutableAttributedString {
     let formattedString = NSMutableAttributedString(string: string)
     let all = NSRange(location: 0, length: string.count)
 
@@ -72,11 +71,11 @@ struct SwiftDown {
     return formattedString
   }
 
-  func set(bodySize: CGFloat) -> SwiftDown {
+  public func set(bodySize: CGFloat) -> SwiftDown {
     return SwiftDown(font: self.font.withSize(bodySize), fontColor: self.fontColor)
   }
 
-  func set(fontColor: SystemColorAlias) -> SwiftDown {
+  public func set(fontColor: SystemColorAlias) -> SwiftDown {
     return SwiftDown(font: self.font, fontColor: fontColor)
   }
 }
