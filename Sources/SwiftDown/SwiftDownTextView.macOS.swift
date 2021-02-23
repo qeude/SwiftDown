@@ -29,6 +29,7 @@
     private(set) var font: NSFont? = .systemFont(ofSize: NSFont.systemFontSize, weight: .regular)
     private(set) var insertionPointColor: NSColor? = nil
     private(set) var textAlignment: TextAlignment = .leading
+    private(set) var insetsSize: CGFloat = 0
 
     public init(
       text: Binding<String>,
@@ -51,6 +52,7 @@
       let textView = CustomTextView(
         text: text,
         isEditable: isEditable,
+        insetsSize: insetsSize,
         font: font
       )
       textView.delegate = context.coordinator
@@ -134,6 +136,7 @@
   public final class CustomTextView: NSView {
     private var isEditable: Bool
     private var font: NSFont?
+    private var insetsSize: CGFloat
 
     weak var delegate: NSTextViewDelegate?
 
@@ -225,17 +228,17 @@
         width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
       textView.minSize = NSSize(width: 0, height: contentSize.height)
       textView.textColor = NSColor.labelColor
-
+      textView.textContainerInset = NSSize(width: self.insetsSize, height: self.insetsSize)
       return textView
     }()
 
     // MARK: - Init
-    init(text: String, isEditable: Bool, font: NSFont?) {
+    init(text: String, isEditable: Bool, insetsSize: CGFloat, font: NSFont?) {
       self.font = font
       self.isEditable = isEditable
       self.text = text
       self.attributedText = NSMutableAttributedString()
-
+      self.insetsSize = insetsSize
       super.init(frame: .zero)
     }
 
@@ -299,6 +302,12 @@
     public func multilineTextAlignment(_ alignment: TextAlignment) -> Self {
       var editor = self
       editor.textAlignment = alignment
+      return editor
+    }
+
+    public func insetsSize(_ size: CGFloat) -> Self {
+      var editor = self
+      editor.insetsSize = size
       return editor
     }
   }
