@@ -195,7 +195,7 @@
       scrollView.hasHorizontalRuler = false
       scrollView.autoresizingMask = [.width, .height]
       scrollView.translatesAutoresizingMaskIntoConstraints = false
-
+      scrollView.autohidesScrollers = true
       return scrollView
     }()
 
