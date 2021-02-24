@@ -8,6 +8,12 @@
   import SwiftUI
   import AppKit
   import Combine
+  
+  private class TransparentBackgroundScroller: NSScroller {
+    override func draw(_ dirtyRect: NSRect) {
+        self.drawKnob()
+    }
+  }
 
   public struct SwiftDownTextView: NSViewRepresentable {
     @Binding var text: String {
@@ -196,6 +202,7 @@
       scrollView.autoresizingMask = [.width, .height]
       scrollView.translatesAutoresizingMaskIntoConstraints = false
       scrollView.autohidesScrollers = true
+      scrollView.verticalScroller = TransparentBackgroundScroller()
       return scrollView
     }()
 
