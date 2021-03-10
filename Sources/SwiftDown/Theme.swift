@@ -27,7 +27,7 @@ public struct Theme {
   var styles: [Style] = []
 
   init(_ name: String) {
-    let bundle = Bundle.main
+    let bundle = Bundle.module
 
     guard let path = bundle.path(forResource: "Themes/\(name)", ofType: "json") else {
       print("[SwiftDown] Unable to load your theme file.")

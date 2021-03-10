@@ -19,6 +19,18 @@
     var onCommit: () -> Void = {}
     var onTextChange: (String) -> Void = { _ in }
 
+    public init(
+      text: Binding<String>,
+      onEditingChanged: @escaping () -> Void = {},
+      onCommit: @escaping () -> Void = {},
+      onTextChange: @escaping (String) -> Void = { _ in }
+    ) {
+      _text = text
+      self.onEditingChanged = onEditingChanged
+      self.onCommit = onCommit
+      self.onTextChange = onTextChange
+    }
+
     public func makeCoordinator() -> Coordinator {
       Coordinator(self)
     }
@@ -97,7 +109,7 @@
     }
   }
 
-  class OpaqueGridScroller: NSScroller {
+  class TransparentBackgroundScroller: NSScroller {
     override func draw(_ dirtyRect: NSRect) {
       self.drawKnob()
     }
@@ -136,7 +148,7 @@
       scrollView.translatesAutoresizingMaskIntoConstraints = false
       scrollView.autohidesScrollers = true
       scrollView.borderType = .noBorder
-      scrollView.verticalScroller = OpaqueGridScroller()
+      scrollView.verticalScroller = TransparentBackgroundScroller()
       return scrollView
     }()
 

@@ -12,7 +12,7 @@ import Foundation
   import UIKit
 
   public struct SwiftDownEditor: UIViewRepresentable {
-    @Binding var text: String
+    @Binding public var text: String
 
     private(set) var isEditable: Bool = true
     private(set) var theme: Theme = Theme.BuiltIn.oneDark.theme()
@@ -22,9 +22,21 @@ import Foundation
     private(set) var keyboardType: UIKeyboardType = .default
     private(set) var textAlignment: TextAlignment = .leading
 
-    var onEditingChanged: () -> Void = {}
-    var onCommit: () -> Void = {}
-    var onTextChange: (String) -> Void = { _ in }
+    public var onEditingChanged: () -> Void = {}
+    public var onCommit: () -> Void = {}
+    public var onTextChange: (String) -> Void = { _ in }
+
+    public init(
+      text: Binding<String>,
+      onEditingChanged: @escaping () -> Void = {},
+      onCommit: @escaping () -> Void = {},
+      onTextChange: @escaping (String) -> Void = { _ in }
+    ) {
+      _text = text
+      self.onEditingChanged = onEditingChanged
+      self.onCommit = onCommit
+      self.onTextChange = onTextChange
+    }
 
     public func makeUIView(context: Context) -> CustomTextView {
       let editor = CustomTextView(frame: .zero, theme: theme)
