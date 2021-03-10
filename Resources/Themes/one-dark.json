@@ -1,0 +1,71 @@
+{
+    "name": "One Dark",
+    "author": {
+        "name": "Quentin Eude",
+        "email": "quentineude@gmail.com"
+    },
+    "version": "1.0",
+    "editor": {
+        "backgroundColor": "#292B33",
+        "tintColor": "#A1A8B5",
+        "cursorColor": "#A1A8B5"
+    },
+    "styles": {
+        "h1": {
+            "color": "#D36770",
+            "size": 23
+        },
+        "h2": {
+            "color": "#D36770",
+            "size": 20
+        },
+        "h3": {
+            "color": "#D36770",
+            "size": 18
+        },
+        "h4": {
+            "color": "#D36770",
+        },
+        "h5": {
+            "color": "#D36770",
+        },
+        "h6": {
+            "color": "#D36770",
+        },
+        "body": {
+            "font": "Menlo-Regular",
+            "size": 15,
+            "color": "#A1A8B5"
+        },
+        "bold": {
+            "font": "Menlo-Bold",
+            "color": "#D19A66"
+        },
+        "italic": {
+            "font": "Menlo-Italic",
+            "color": "#C678DD"
+        },
+        "boldItalic": {
+            "font": "Menlo-Italic",
+            "color": "#C678DD"
+        },
+        "linkOrImage": {
+            "color": "#a66bff"
+        },
+        "inlineCode": {
+            "color": "#95C077"
+        },
+        "codeBlock": {
+            "color": "#1CBD47"
+        },
+        "blockquote": {
+            "color": "#1CBD47"
+        },
+        "unorderedList": {
+            "color": "#1CBD47"
+        },
+        "orderedList": {
+            "color": "#1CBD47"
+        }
+    }
+}
