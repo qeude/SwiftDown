@@ -13,7 +13,7 @@
 
 public struct Theme {
   public enum BuiltIn: String {
-    case oneDark = "one-dark"
+    case defaultDark = "default-dark"
 
     public func theme() -> Theme {
       return Theme(self.rawValue)

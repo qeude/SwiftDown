@@ -15,7 +15,7 @@ import Foundation
     @Binding public var text: String
 
     private(set) var isEditable: Bool = true
-    private(set) var theme: Theme = Theme.BuiltIn.oneDark.theme()
+    private(set) var theme: Theme = Theme.BuiltIn.defaultDark.theme()
     private(set) var insetsSize: CGFloat = 0
     private(set) var autocapitalizationType: UITextAutocapitalizationType = .sentences
     private(set) var autocorrectionType: UITextAutocorrectionType = .default
