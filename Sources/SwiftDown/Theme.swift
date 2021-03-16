@@ -12,6 +12,7 @@
 #endif
 
 public struct Theme {
+  // MARK: - BuildIn
   public enum BuiltIn: String {
     case defaultDark = "default-dark"
 
@@ -20,13 +21,13 @@ public struct Theme {
     }
   }
 
-  var body: Style = Style()
   var backgroundColor: UniversalColor = UniversalColor.clear
   var tintColor: UniversalColor = UniversalColor.blue
   var cursorColor: UniversalColor = UniversalColor.blue
-  var styles: [Style] = []
+  var styles: [MarkdownNode.MarkdownType: Style] = [:]
 
-  init(_ name: String) {
+  public init(_ name: String) {
+    self.init()
     let bundle = Bundle.module
 
     guard let path = bundle.path(forResource: "Themes/\(name)", ofType: "json") else {
@@ -40,13 +41,18 @@ public struct Theme {
     }
   }
 
-  init(themePath: String) {
+  public init(themePath: String) {
+    self.init()
     if let data = convertFile(themePath) {
       configure(data)
     }
   }
 
-  init() {}
+  public init() {
+    MarkdownNode.MarkdownType.allCases.forEach { type in
+      styles[type] = Style()
+    }
+  }
 
   mutating func configure(_ data: [String: AnyObject]) {
     data.forEach { key, value in
@@ -68,19 +74,10 @@ public struct Theme {
   mutating private func configureStyles(_ attributes: [String: AnyObject]) {
     attributes.forEach { key, value in
       if let value = value as? [String: AnyObject],
-        let style = configureStyle(value as [String: AnyObject])
+        let style = configureStyle(value as [String: AnyObject]),
+        let mdType = MarkdownNode.MarkdownType.from(string: key)
       {
-        if let regexString = attributes["regex"] as? String {
-          let regex = regexString.toRegex()
-          styles.append(Style(regex: regex, attributes: style))
-        } else {
-
-          if key == "body" {
-            body.attributes = style
-          } else {
-            styles.append(Style(element: Element.from(string: key), attributes: style))
-          }
-        }
+        styles[mdType] = Style(attributes: style)
       }
     }
   }
@@ -150,5 +147,20 @@ public struct Theme {
     }
 
     return nil
+  }
+
+  // MARK: - Static methods
+  static func applyMarkdown(markdown: MarkdownNode, with theme: Theme) -> [NSAttributedString.Key:
+    Any]
+  {
+    guard let attributes = theme.styles[markdown.type]?.attributes else { return [:] }
+    return attributes
+  }
+
+  static func applyBody(with theme: Theme) -> [NSAttributedString.Key: Any] {
+    guard let attributes = theme.styles[MarkdownNode.MarkdownType.body]?.attributes else {
+      return [:]
+    }
+    return attributes
   }
 }

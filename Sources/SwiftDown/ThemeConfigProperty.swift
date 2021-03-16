@@ -7,6 +7,7 @@
 
 import Foundation
 
+// MARK: - ConfigProperty
 enum ConfigProperty {
   case editor
   case styles
@@ -23,6 +24,7 @@ enum ConfigProperty {
 
 }
 
+// MARK: - EditorConfigProperty
 enum EditorConfigProperty {
   case backgroundColor
   case tintColor
@@ -40,6 +42,7 @@ enum EditorConfigProperty {
   ]
 }
 
+// MARK: - StyleConfigProperty
 enum StyleConfigProperty {
   case font
   case size
@@ -59,6 +62,7 @@ enum StyleConfigProperty {
   ]
 }
 
+// MARK: - TraitConfigProperty
 enum TraitConfigProperty {
   case bold
   case italic

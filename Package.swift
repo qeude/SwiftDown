@@ -14,10 +14,16 @@ let package = Package(
       name: "SwiftDown",
       targets: ["SwiftDown"])
   ],
+  dependencies: [
+    .package(
+      url: "https://github.com/johnxnguyen/Down.git",
+      from: "0.10.0"
+    )
+  ],
   targets: [
     .target(
       name: "SwiftDown",
-      dependencies: [],
+      dependencies: ["Down"],
       resources: [.copy("Resources/Themes")])
   ]
 )
