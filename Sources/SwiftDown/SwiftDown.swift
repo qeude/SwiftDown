@@ -123,6 +123,7 @@
     private lazy var textView: NSTextView = {
       let contentSize = scrollView.contentSize
       let textView = CustomTextView(frame: scrollView.frame, theme: theme)
+      textView.string = text
       textView.storage.markdowner = { self.engine.render($0) }
       textView.storage.theme = theme
       textView.storage.applyMarkdown = { m in Theme.applyMarkdown(markdown: m, with: self.theme) }
