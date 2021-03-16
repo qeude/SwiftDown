@@ -21,7 +21,7 @@ import SwiftUI
     private(set) var keyboardType: UIKeyboardType = .default
     private(set) var textAlignment: TextAlignment = .leading
 
-    let onTextChange: (String) -> Void
+    public var onTextChange: (String) -> Void = { _ in }
     let engine = MarkdownEngine()
 
     public init(
@@ -33,26 +33,43 @@ import SwiftUI
     }
 
     public func makeUIView(context: Context) -> UITextView {
-      let np = SwiftDown(frame: .zero, theme: theme)
-      np.isEditable = true
-      np.isScrollEnabled = true
-      np.onTextChange = onTextChange
-      np.keyboardType = keyboardType
-      np.autocapitalizationType = autocapitalizationType
-      np.autocorrectionType = autocorrectionType
-      np.textContainerInset = UIEdgeInsets(
+      let swiftDown = SwiftDown(frame: .zero, theme: theme)
+      swiftDown.delegate = context.coordinator
+      swiftDown.text = text
+      swiftDown.isEditable = true
+      swiftDown.isScrollEnabled = true
+      swiftDown.onTextChange = onTextChange
+      swiftDown.keyboardType = keyboardType
+      swiftDown.autocapitalizationType = autocapitalizationType
+      swiftDown.autocorrectionType = autocorrectionType
+      swiftDown.textContainerInset = UIEdgeInsets(
         top: insetsSize, left: insetsSize, bottom: insetsSize, right: insetsSize)
-      np.backgroundColor = theme.backgroundColor
-      np.tintColor = theme.tintColor
-      np.storage.markdowner = { engine.render($0) }
+      swiftDown.backgroundColor = theme.backgroundColor
+      swiftDown.tintColor = theme.tintColor
+      swiftDown.storage.markdowner = { engine.render($0) }
       textView.storage.applyMarkdown = { m in Theme.applyMarkdown(markdown: m, with: self.theme) }
       textView.storage.applyBody = { Theme.applyBody(with: self.theme) }
-      np.text = text
-
-      return np
+      return swiftDown
     }
 
     public func updateUIView(_ uiView: UITextView, context: Context) {}
+  }
+
+  // MARK: - SwiftDownEditor iOS Coordinator
+  extension SwiftDownEditor {
+    public class Coordinator: NSObject, UITextViewDelegate {
+      var parent: SwiftDownEditor
+
+      init(_ parent: SwiftDownEditor) {
+        self.parent = parent
+      }
+
+      public func textViewDidChange(_ textView: UITextView) {
+        guard textView.markedTextRange == nil else { return }
+
+        self.parent.text = textView.text
+      }
+    }
   }
 
   // MARK: - iOS Specifics modifiers
@@ -90,7 +107,7 @@ import SwiftUI
     private(set) var theme: Theme = Theme.BuiltIn.defaultDark.theme()
     private(set) var insetsSize: CGFloat = 0
 
-    let onTextChange: (String) -> Void
+    public var onTextChange: (String) -> Void = { _ in }
 
     public init(
       text: Binding<String>,
@@ -101,12 +118,37 @@ import SwiftUI
     }
 
     public func makeNSView(context: Context) -> SwiftDown {
-      let editor = SwiftDown(
+      let swiftDown = SwiftDown(
         text: text, theme: theme, isEditable: isEditable, insetsSize: insetsSize)
-      return editor
+      swiftDown.delegate = context.coordinator
+      return swiftDown
     }
 
     public func updateNSView(_ nsView: SwiftDown, context: Context) {}
+
+    public func makeCoordinator() -> Coordinator {
+      Coordinator(self)
+    }
+  }
+
+  // MARK: - SwiftDownEditor Coordinator macOS
+  extension SwiftDownEditor {
+    // MARK: - Coordinator
+    public class Coordinator: NSObject, NSTextViewDelegate {
+      var parent: SwiftDownEditor
+
+      init(_ parent: SwiftDownEditor) {
+        self.parent = parent
+      }
+
+      public func textDidChange(_ notification: Notification) {
+        guard let textView = notification.object as? NSTextView else {
+          return
+        }
+
+        self.parent.text = textView.string
+      }
+    }
   }
 #endif
 

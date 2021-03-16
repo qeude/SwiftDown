@@ -10,7 +10,6 @@
 
   //MARK: - SwiftDown iOS
   public class SwiftDown: UITextView, UITextViewDelegate {
-    var onTextChange: (String) -> Void = { _ in }
     var storage: Storage = Storage()
 
     convenience init(frame: CGRect, theme: Theme) {
@@ -43,17 +42,12 @@
       storage.addLayoutManager(layoutManager)
       self.delegate = self
     }
-
-    func textViewDidChange(_ textView: UITextView) {
-      onTextChange(textView.text)
-    }
   }
 #else
   import AppKit
 
   //MARK: - CustomTextView
   class CustomTextView: NSTextView {
-    var onTextChange: (String) -> Void = { _ in }
     var storage: Storage = Storage()
 
     convenience init(frame: CGRect, theme: Theme) {
@@ -76,10 +70,6 @@
     required init?(coder: NSCoder) {
       fatalError("init(coder:) has not been implemented")
     }
-
-    override func didChangeText() {
-      self.onTextChange(self.storage.string)
-    }
   }
 
   // MARK: - SwiftDown macOS
@@ -94,7 +84,7 @@
     private var isEditable: Bool
     private var insetsSize: CGFloat
 
-    let onTextChange: (String) -> Void
+    weak var delegate: NSTextViewDelegate?
 
     let engine = MarkdownEngine()
 
@@ -103,7 +93,7 @@
         textView.string = text
       }
     }
-    
+
     // MARK: - ScrollView setup
     private lazy var scrollView: NSScrollView = {
       let scrollView = NSScrollView()
@@ -123,12 +113,12 @@
     private lazy var textView: NSTextView = {
       let contentSize = scrollView.contentSize
       let textView = CustomTextView(frame: scrollView.frame, theme: theme)
+      textView.delegate = self.delegate
       textView.string = text
       textView.storage.markdowner = { self.engine.render($0) }
       textView.storage.theme = theme
       textView.storage.applyMarkdown = { m in Theme.applyMarkdown(markdown: m, with: self.theme) }
       textView.storage.applyBody = { Theme.applyBody(with: self.theme) }
-      textView.onTextChange = onTextChange
       textView.autoresizingMask = .width
       textView.drawsBackground = true
       textView.isEditable = self.isEditable
@@ -147,14 +137,12 @@
     }()
 
     init(
-      text: String, theme: Theme, isEditable: Bool, insetsSize: CGFloat = 0,
-      onTextChange: @escaping (String) -> Void = { _ in }
+      text: String, theme: Theme, isEditable: Bool, insetsSize: CGFloat = 0
     ) {
       self.isEditable = isEditable
       self.text = text
       self.theme = theme
       self.insetsSize = insetsSize
-      self.onTextChange = onTextChange
 
       super.init(frame: .zero)
     }
