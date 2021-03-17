@@ -29,6 +29,9 @@ public struct MarkdownNode: Equatable {
     case header1
     case header2
     case header3
+    case header4
+    case header5
+    case header6
     case code
     case italic
     case bold
@@ -44,6 +47,9 @@ public struct MarkdownNode: Equatable {
       case .header1: return 9
       case .header2: return 9
       case .header3: return 9
+      case .header4: return 9
+      case .header5: return 9
+      case .header6: return 9
       case .code: return 14
       case .italic: return 17
       case .bold: return 18
@@ -74,6 +80,9 @@ public struct MarkdownNode: Equatable {
       case 1: return header1
       case 2: return header2
       case 3: return header3
+      case 4: return header4
+      case 5: return header5
+      case 6: return header6
       default: return header3
       }
     }
@@ -84,9 +93,9 @@ public struct MarkdownNode: Equatable {
       case "h1": return MarkdownType.header1
       case "h2": return MarkdownType.header2
       case "h3": return MarkdownType.header3
-      case "h4": return MarkdownType.header3
-      case "h5": return MarkdownType.header3
-      case "h6": return MarkdownType.header3
+      case "h4": return MarkdownType.header4
+      case "h5": return MarkdownType.header5
+      case "h6": return MarkdownType.header6
       case "inlineCode": return MarkdownType.code
       case "codeBlock": return MarkdownType.codeBlock
       case "link": return MarkdownType.link
