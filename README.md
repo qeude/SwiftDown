@@ -11,7 +11,7 @@ Support iOS and macOS. 💻📱
 
 Either use Xcode to add the package dependency or add the following dependency to your Package.swift:
 ```
-.package(url: "https://github.com/qeude/SwiftDown.git", from: "0.1.1"),
+.package(url: "https://github.com/qeude/SwiftDown.git", from: "0.1.4"),
 ```
 
 ## 🔧 Usage
