@@ -14,6 +14,21 @@ Either use Xcode to add the package dependency or add the following dependency t
 .package(url: "https://github.com/qeude/SwiftDown.git", from: "0.1.1"),
 ```
 
+## 🔧 Usage
+```swift
+import SwiftDown
+import SwiftUI
+
+struct ContentView: View {
+    @Binding var text: String = ""
+
+    var body: some View {
+        SwiftDownEditor(text: $text)
+            .insetsSize(40)
+            .theme(Theme.BuiltIn.defaultDark.theme())
+    }
+}
+```
 ## 🖌️ Themes
 
 ### 🖼 BuildIn themes
