@@ -15,6 +15,7 @@ public struct Theme {
   // MARK: - BuildIn
   public enum BuiltIn: String {
     case defaultDark = "default-dark"
+    case defaultLight = "default-light"
 
     public func theme() -> Theme {
       return Theme(self.rawValue)
