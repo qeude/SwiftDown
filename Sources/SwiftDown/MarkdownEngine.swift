@@ -19,9 +19,6 @@ public class MarkdownEngine {
     if let type = MarkdownNode.MarkdownType.from(
       rawValue: Int(p.type), with: node.cmarkNode.headingLevel)
     {
-      print("s : \(lines[Int(p.start_line) - 1] + Int(p.start_column) - 1)")
-      print("e : \(lines[Int(p.end_line) - 1] + Int(p.end_column) - 1)")
-
       let s = lines[Int(p.start_line) - 1] + Int(p.start_column) - 1
       let e = lines[Int(p.end_line) - 1] + Int(p.end_column) - 1
 
