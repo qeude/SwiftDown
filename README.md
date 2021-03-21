@@ -1,8 +1,12 @@
 # SwiftDown
 
 ## 📖 Description
-SwiftUI package that provide a Markdown Editor view.
-Support iOS and macOS. 💻📱
+Markdown Editor SwiftUI package.
+
+- 🎉 Live preview directly in editor for most of Markdown elements, without web based preview.
+- ⚡️ Fast, built on top of [cmark](https://github.com/commonmark/cmark).
+- 🗒 Pure markdown, no proprietary format.
+- 💻:📱 macOS and iOS support.
 
 <div align=center><img src="resources/demo.gif" align=center height="500"></div>
 
