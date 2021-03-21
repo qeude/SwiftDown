@@ -19,14 +19,19 @@ public class MarkdownEngine {
     if let type = MarkdownNode.MarkdownType.from(
       rawValue: Int(p.type), with: node.cmarkNode.headingLevel)
     {
+      print("s : \(lines[Int(p.start_line) - 1] + Int(p.start_column) - 1)")
+      print("e : \(lines[Int(p.end_line) - 1] + Int(p.end_column) - 1)")
+
       let s = lines[Int(p.start_line) - 1] + Int(p.start_column) - 1
       let e = lines[Int(p.end_line) - 1] + Int(p.end_column) - 1
 
-      let fromIdx = text.index(text.startIndex, offsetBy: s)
+      let fromIdx = text.utf8.index(text.utf8.startIndex, offsetBy: s)
       let range =
-        text
-        .index(text.startIndex, offsetBy: e, limitedBy: text.endIndex)
-        .map { NSRange(fromIdx...$0, in: text) } ?? NSRange(fromIdx..<text.endIndex, in: text)
+        text.utf8
+        .index(text.utf8.startIndex, offsetBy: e, limitedBy: text.utf8.endIndex)
+        .flatMap {
+          if ($0 < text.utf8.endIndex) { return NSRange(fromIdx...$0, in: text) } else { return nil }
+        } ?? NSRange(fromIdx..<text.utf8.endIndex, in: text)
       return MarkdownNode(range: range, type: type, headingLevel: node.cmarkNode.headingLevel)
     } else {
       return nil
@@ -41,7 +46,7 @@ public class MarkdownEngine {
 
   public func render(_ markdownString: String) -> [MarkdownNode] {
     text = markdownString
-    let lcs = markdownString.components(separatedBy: .newlines).map { $0.count }
+    let lcs = markdownString.components(separatedBy: .newlines).map { $0.utf8.count }
     var sum = 0
     var counts: [Int] = []
     for l in lcs {

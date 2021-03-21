@@ -102,7 +102,7 @@ public struct MarkdownNode: Equatable {
       case "image": return MarkdownType.image
       case "bold": return MarkdownType.bold
       case "italic": return MarkdownType.italic
-      case "blockquote": return MarkdownType.quote
+      case "blockQuote": return MarkdownType.quote
       case "list": return MarkdownType.list
       default: return nil
       }

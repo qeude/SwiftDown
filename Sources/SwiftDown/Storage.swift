@@ -104,7 +104,7 @@ public class Storage: NSTextStorage {
 
   func applyStyles() {
     let md = markdowner(self.string)
-    let wholeDocument = NSRange(location: 0, length: self.string.count)
+    let wholeDocument = NSRange(location: 0, length: self.string.utf16.count)
     setAttributes(applyBody(), range: wholeDocument)
     md.forEach {
       addAttributes(applyMarkdown($0), range: $0.range)
