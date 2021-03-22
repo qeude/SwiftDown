@@ -11,9 +11,7 @@ import Combine
 #elseif os(macOS)
   import AppKit
 #endif
-func == (lhs: EditedText, rhs: EditedText) -> Bool {
-    return lhs.string == rhs.string
-}
+
 struct EditedText: Equatable {
   let string: String
   let editedRange: NSRange
