@@ -14,7 +14,7 @@ public class MarkdownEngine {
 
   public init() {}
 
-  private func toMarkdownNode(_ node: Node) -> MarkdownNode? {
+  private func toMarkdownNode(_ node: Node, offset: Int) -> MarkdownNode? {
     let p = node.cmarkNode.pointee
     if let type = MarkdownNode.MarkdownType.from(
       rawValue: Int(p.type), with: node.cmarkNode.headingLevel)
@@ -27,7 +27,12 @@ public class MarkdownEngine {
         text.utf8
         .index(text.utf8.startIndex, offsetBy: e, limitedBy: text.utf8.endIndex)
         .flatMap {
-          if ($0 < text.utf8.endIndex) { return NSRange(fromIdx...$0, in: text) } else { return nil }
+          if ($0 < text.utf8.endIndex ) {
+            let range = NSRange(fromIdx...$0, in: text)
+            return NSRange(location: range.location + offset, length: range.length)
+          } else {
+            return nil
+          }
         } ?? NSRange(fromIdx..<text.utf8.endIndex, in: text)
       return MarkdownNode(range: range, type: type, headingLevel: node.cmarkNode.headingLevel)
     } else {
@@ -35,13 +40,13 @@ public class MarkdownEngine {
     }
   }
 
-  func exploreChildren(_ node: Node) -> [MarkdownNode] {
-    node.children.reduce(toMarkdownNode(node).map { c in [c] } ?? []) { (r, c) in
-      r + exploreChildren(c)
+  func exploreChildren(_ node: Node, offset: Int) -> [MarkdownNode] {
+    node.children.reduce(toMarkdownNode(node, offset: offset).map { c in [c] } ?? []) { (r, c) in
+      r + exploreChildren(c, offset: offset)
     }
   }
 
-  public func render(_ markdownString: String) -> [MarkdownNode] {
+  public func render(_ markdownString: String, offset: Int) -> [MarkdownNode] {
     text = markdownString
     let lcs = markdownString.components(separatedBy: .newlines).map { $0.utf8.count }
     var sum = 0
@@ -54,6 +59,6 @@ public class MarkdownEngine {
 
     let result = (try? Down(markdownString: markdownString).toDocument(.smart))!
 
-    return exploreChildren(result)
+    return exploreChildren(result, offset: offset)
   }
 }

@@ -11,6 +11,13 @@ import Combine
 #elseif os(macOS)
   import AppKit
 #endif
+func == (lhs: EditedText, rhs: EditedText) -> Bool {
+    return lhs.string == rhs.string
+}
+struct EditedText: Equatable {
+  let string: String
+  let editedRange: NSRange
+}
 
 public class Storage: NSTextStorage {
   public var theme: Theme? {
@@ -20,11 +27,11 @@ public class Storage: NSTextStorage {
       self.endEditing()
     }
   }
-  public var markdowner: (String) -> [MarkdownNode] = { _ in [] }
+  public var markdowner: (String, Int) -> [MarkdownNode] = { _,_  in [] }
   public var applyMarkdown: (MarkdownNode) -> [NSAttributedString.Key: Any] = { _ in [:] }
   public var applyBody: () -> [NSAttributedString.Key: Any] = { [:] }
   var cancellables = Set<AnyCancellable>()
-  let subj = PassthroughSubject<String, Never>()
+  let subj = PassthroughSubject<EditedText, Never>()
 
   var backingStore = NSTextStorage()
 
@@ -36,10 +43,10 @@ public class Storage: NSTextStorage {
     super.init()
 
     subj
-      .debounce(for: .milliseconds(200), scheduler: DispatchQueue.main)
+      .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
       .removeDuplicates()
       .sink(receiveValue: { s in
-        self.applyStyles()
+        self.applyStyles(editedRange: s.editedRange)
       })
       .store(in: &cancellables)
   }
@@ -98,17 +105,24 @@ public class Storage: NSTextStorage {
   }
 
   override public func processEditing() {
-    subj.send(backingStore.string)
+    subj.send(EditedText(string: backingStore.string, editedRange: self.editedRange))
     super.processEditing()
   }
 
-  func applyStyles() {
-    let md = markdowner(self.string)
-    let wholeDocument = NSRange(location: 0, length: self.string.utf16.count)
-    setAttributes(applyBody(), range: wholeDocument)
+  func applyStyles(editedRange: NSRange? = nil) {
+    let paragraphNSRange = self.string.paragraph(for: editedRange)
+    let paragraphRange = Range(paragraphNSRange, in: self.string)
+    let paragraph: String
+    if let paragraphRange = paragraphRange {
+      paragraph = String(self.string[paragraphRange])
+    } else {
+      paragraph = self.string
+    }
+    let md = markdowner(paragraph, paragraphNSRange.lowerBound)
+    setAttributes(applyBody(), range: paragraphNSRange)
     md.forEach {
       addAttributes(applyMarkdown($0), range: $0.range)
     }
-    self.edited(.editedAttributes, range: wholeDocument, changeInLength: 0)
+//    self.edited(.editedAttributes, range: paragraphNSRange, changeInLength: 0)
   }
 }

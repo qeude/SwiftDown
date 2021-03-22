@@ -115,7 +115,7 @@
       let textView = CustomTextView(frame: scrollView.frame, theme: theme)
       textView.delegate = self.delegate
       textView.string = text
-      textView.storage.markdowner = { self.engine.render($0) }
+      textView.storage.markdowner = { self.engine.render($0, offset: $1) }
       textView.storage.theme = theme
       textView.storage.applyMarkdown = { m in Theme.applyMarkdown(markdown: m, with: self.theme) }
       textView.storage.applyBody = { Theme.applyBody(with: self.theme) }
