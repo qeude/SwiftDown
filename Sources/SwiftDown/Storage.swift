@@ -121,6 +121,6 @@ public class Storage: NSTextStorage {
     md.forEach {
       addAttributes(applyMarkdown($0), range: $0.range)
     }
-//    self.edited(.editedAttributes, range: paragraphNSRange, changeInLength: 0)
+    self.edited(.editedAttributes, range: paragraphNSRange, changeInLength: 0)
   }
 }

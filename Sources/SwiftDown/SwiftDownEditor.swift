@@ -10,7 +10,7 @@ import SwiftUI
 
 #if os(iOS)
   // MARK: - SwiftDownEditor iOS
-  public struct SwiftDownEditor: UIViewRepresentable {
+public struct SwiftDownEditor: UIViewRepresentable {
     @Binding var text: String
 
     private(set) var isEditable: Bool = true
@@ -38,7 +38,6 @@ import SwiftUI
       swiftDown.text = text
       swiftDown.isEditable = true
       swiftDown.isScrollEnabled = true
-      swiftDown.onTextChange = onTextChange
       swiftDown.keyboardType = keyboardType
       swiftDown.autocapitalizationType = autocapitalizationType
       swiftDown.autocorrectionType = autocorrectionType
@@ -46,13 +45,17 @@ import SwiftUI
         top: insetsSize, left: insetsSize, bottom: insetsSize, right: insetsSize)
       swiftDown.backgroundColor = theme.backgroundColor
       swiftDown.tintColor = theme.tintColor
-      swiftDown.storage.markdowner = { engine.render($0) }
-      textView.storage.applyMarkdown = { m in Theme.applyMarkdown(markdown: m, with: self.theme) }
-      textView.storage.applyBody = { Theme.applyBody(with: self.theme) }
+      swiftDown.storage.markdowner =  { self.engine.render($0, offset: $1) }
+      swiftDown.storage.applyMarkdown = { m in Theme.applyMarkdown(markdown: m, with: self.theme) }
+      swiftDown.storage.applyBody = { Theme.applyBody(with: self.theme) }
       return swiftDown
     }
 
     public func updateUIView(_ uiView: UITextView, context: Context) {}
+  
+    public func makeCoordinator() -> Coordinator {
+      Coordinator(self)
+    }
   }
 
   // MARK: - SwiftDownEditor iOS Coordinator
