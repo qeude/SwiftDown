@@ -45,6 +45,7 @@ import SwiftUI
         top: insetsSize, left: insetsSize, bottom: insetsSize, right: insetsSize)
       swiftDown.backgroundColor = theme.backgroundColor
       swiftDown.tintColor = theme.tintColor
+      swiftDown.textColor = theme.tintColor
       swiftDown.storage.markdowner = { self.engine.render($0) }
       swiftDown.storage.applyMarkdown = { m in Theme.applyMarkdown(markdown: m, with: self.theme) }
       swiftDown.storage.applyBody = { Theme.applyBody(with: self.theme) }
