@@ -15,7 +15,7 @@ Markdown Editor SwiftUI package.
 
 Either use Xcode to add the package dependency or add the following dependency to your Package.swift:
 ```
-.package(url: "https://github.com/qeude/SwiftDown.git", from: "0.1.4"),
+.package(url: "https://github.com/qeude/SwiftDown.git", from: "0.1.6"),
 ```
 
 ## 🔧 Usage
