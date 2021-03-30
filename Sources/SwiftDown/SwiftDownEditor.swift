@@ -10,7 +10,7 @@ import SwiftUI
 
 #if os(iOS)
   // MARK: - SwiftDownEditor iOS
-  public struct SwiftDownEditor: UIViewRepresentable {
+public struct SwiftDownEditor: UIViewRepresentable {
     @Binding var text: String
 
     private(set) var isEditable: Bool = true
@@ -46,15 +46,14 @@ import SwiftUI
       swiftDown.backgroundColor = theme.backgroundColor
       swiftDown.tintColor = theme.tintColor
       swiftDown.textColor = theme.tintColor
-      swiftDown.storage.markdowner = { self.engine.render($0) }
+      swiftDown.storage.markdowner =  { self.engine.render($0, offset: $1) }
       swiftDown.storage.applyMarkdown = { m in Theme.applyMarkdown(markdown: m, with: self.theme) }
       swiftDown.storage.applyBody = { Theme.applyBody(with: self.theme) }
-
       return swiftDown
     }
 
     public func updateUIView(_ uiView: UITextView, context: Context) {}
-    
+  
     public func makeCoordinator() -> Coordinator {
       Coordinator(self)
     }

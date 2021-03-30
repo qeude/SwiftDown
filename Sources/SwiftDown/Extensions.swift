@@ -69,6 +69,25 @@ extension String {
     else { return nil }
     return from..<to
   }
+  
+  func paragraph(for editedRange: NSRange?) -> NSRange {
+    guard let editedRange = editedRange else {
+      return NSRange(location: 0, length: self.utf16.count)
+    }
+    let beforeEditingRange = self.range(from: NSRange(location: 0, length: editedRange.lowerBound))
+    let afterEditingLength = self.utf16.count - editedRange.upperBound
+    let afterEditingRange = self.range(from: NSRange(location: editedRange.upperBound, length: afterEditingLength))
+    var startPosition = 0
+    var endPosition = self.utf16.count
+    if let startPositionRange = self.range(of: "\n\n", options: .backwards, range: beforeEditingRange) {
+      startPosition = self.nsRange(from: startPositionRange).upperBound
+    }
+    if let endPositionRange = self.range(of: "\n\n", range: afterEditingRange) {
+      endPosition = self.nsRange(from: endPositionRange).upperBound
+    }
+    let length = endPosition - startPosition
+    return NSRange(location: startPosition, length: length)
+  }
 }
 
 extension UniversalFont {
