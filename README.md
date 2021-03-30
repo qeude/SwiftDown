@@ -44,6 +44,10 @@ struct ContentView: View {
 
 ### 🧑‍🎨 Custom themes
 SwiftDown supports theming by using config `.json` files as [this one](./Sources/SwiftDown/Resources/Themes/default-dark.json)
+Then init your custom theme as below.
+```swift
+Theme(themePath: Bundle.main.path(forResource: "my-custom-theme", ofType: "json"))
+```
 
 ## 👨🏻‍💻 Author
 * Quentin Eude
