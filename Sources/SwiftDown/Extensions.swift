@@ -47,18 +47,6 @@ extension String {
       length: utf16.distance(from: from!, to: to!))
   }
 
-  func toRegex() -> NSRegularExpression {
-    var pattern: NSRegularExpression = NSRegularExpression()
-
-    do {
-      try pattern = NSRegularExpression(pattern: self, options: .anchorsMatchLines)
-    } catch {
-      print(error)
-    }
-
-    return pattern
-  }
-
   func range(from nsRange: NSRange) -> Range<String.Index>? {
     guard
       let from16 = utf16.index(
@@ -83,7 +71,7 @@ extension String {
       startPosition = self.nsRange(from: startPositionRange).upperBound
     }
     if let endPositionRange = self.range(of: "\n\n", range: afterEditingRange) {
-      endPosition = self.nsRange(from: endPositionRange).upperBound
+      endPosition = self.nsRange(from: endPositionRange).lowerBound
     }
     let length = endPosition - startPosition
     return NSRange(location: startPosition, length: length)

@@ -24,6 +24,11 @@ let package = Package(
     .target(
       name: "SwiftDown",
       dependencies: ["Down"],
-      resources: [.copy("Resources/Themes")])
+      resources: [.copy("Resources/Themes")]
+    ),
+    .testTarget(
+      name: "SwiftDownTests",
+      dependencies: ["SwiftDown"]
+    )
   ]
 )

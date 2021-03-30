@@ -37,9 +37,7 @@ public struct Theme {
       return
     }
 
-    if let data = convertFile(path) {
-      configure(data)
-    }
+    self.init(themePath: path)
   }
 
   public init(themePath: String) {
