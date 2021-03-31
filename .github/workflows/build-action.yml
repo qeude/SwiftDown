@@ -1,0 +1,19 @@
+name: Swift
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build
+      run: xcodebuild test -scheme SwiftDown -destination platform="macOS" -enableCodeCoverage YES
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1.3.1
