@@ -1,22 +1,23 @@
 import XCTest
+import Nimble
 
 @testable import SwiftDown
 
 final class ThemConfigPropertyTests: XCTestCase {
   func testUnknowConfigProperty() {
-    XCTAssertEqual(ConfigProperty.from(rawValue: "test"), .unknown)
+    expect(ConfigProperty.from(rawValue: "test")).to(equal(.unknown))
   }
   
   func testUnknowEditorConfigProperty() {
-    XCTAssertEqual(EditorConfigProperty.from(rawValue: "test"), .unknown)
+    expect(EditorConfigProperty.from(rawValue: "test")).to(equal(.unknown))
   }
   
   func testUnknowStyleConfigPropertyProperty() {
-    XCTAssertEqual(StyleConfigProperty.from(rawValue: "test"), .unknown)
+    expect(StyleConfigProperty.from(rawValue: "test")).to(equal(.unknown))
   }
   
   func testUnknowTraitConfigPropertyPropertyProperty() {
-    XCTAssertEqual(TraitConfigProperty.from(rawValue: "test"), .unknown)
+    expect(TraitConfigProperty.from(rawValue: "test")).to(equal(.unknown))
   }
   
   static var allTests = [

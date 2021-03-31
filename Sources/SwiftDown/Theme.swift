@@ -131,7 +131,7 @@ public struct Theme {
     }
   }
 
-  func convertFile(_ path: String) -> [String: AnyObject]? {
+  private func convertFile(_ path: String) -> [String: AnyObject]? {
     do {
       let json = try String(contentsOf: URL(fileURLWithPath: path), encoding: .utf8)
       if let data = json.data(using: .utf8) {

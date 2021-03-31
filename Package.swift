@@ -18,7 +18,9 @@ let package = Package(
     .package(
       url: "https://github.com/johnxnguyen/Down.git",
       from: "0.10.0"
-    )
+    ),
+    .package(url: "https://github.com/Quick/Nimble.git", .upToNextMajor(from: "9.0.0")),
+
   ],
   targets: [
     .target(
@@ -28,7 +30,7 @@ let package = Package(
     ),
     .testTarget(
       name: "SwiftDownTests",
-      dependencies: ["SwiftDown"]
+      dependencies: ["SwiftDown", "Nimble"]
     )
   ]
 )

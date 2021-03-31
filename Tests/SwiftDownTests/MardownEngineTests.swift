@@ -1,4 +1,5 @@
 import XCTest
+import Nimble
 
 @testable import SwiftDown
 
@@ -6,7 +7,7 @@ final class MarkdownEngineTests: XCTestCase {
   func testRender() {
     let string = "# H1\n## H2\n### H3\n#### H4\n##### H5\n###### H6\n**bold** __bold__\n*italic* _italic_\n`inline code`\n```\ncode block\n```\n\n> block quote\n\n- list\n\n1. list\n\n[link](link)\n\nbody"
     let mardownNodes = MarkdownEngine().render(string, offset: 0)
-    XCTAssertEqual(mardownNodes.count, 16)
+    expect(mardownNodes).to(haveCount(16))
     let expectedMarkdownNodes = [
       MarkdownNode(range:NSRange(location : 0, length : 4), type:.header1, headingLevel:1),
       MarkdownNode(range:NSRange(location : 5, length : 5), type:.header2, headingLevel:2),
@@ -25,13 +26,13 @@ final class MarkdownEngineTests: XCTestCase {
       MarkdownNode(range:NSRange(location : 138, length : 8), type:.list, headingLevel:0),
       MarkdownNode(range:NSRange(location : 147, length : 12), type:.link, headingLevel:0)
     ]
-    XCTAssertTrue(mardownNodes == expectedMarkdownNodes)
+    expect(mardownNodes).to(equal(expectedMarkdownNodes))
   }
   
   func testRenderWithOffset() {
     let string = "# H1\n## H2\n### H3\n#### H4\n##### H5\n###### H6\n**bold** __bold__\n*italic* _italic_\n`inline code`\n```\ncode block\n```\n\n> block quote\n\n- list\n\n1. list\n\n[link](link)\n\nbody"
     let mardownNodes = MarkdownEngine().render(string, offset: 10)
-    XCTAssertEqual(mardownNodes.count, 16)
+    expect(mardownNodes).to(haveCount(16))
     let expectedMarkdownNodes = [
       MarkdownNode(range:NSRange(location : 10, length : 4), type:.header1, headingLevel:1),
       MarkdownNode(range:NSRange(location : 15, length : 5), type:.header2, headingLevel:2),
@@ -50,7 +51,7 @@ final class MarkdownEngineTests: XCTestCase {
       MarkdownNode(range:NSRange(location : 148, length : 8), type:.list, headingLevel:0),
       MarkdownNode(range:NSRange(location : 157, length : 12), type:.link, headingLevel:0)
     ]
-    XCTAssertTrue(mardownNodes == expectedMarkdownNodes)
+    expect(mardownNodes).to(equal(expectedMarkdownNodes))
   }
   
   static var allTests = [
