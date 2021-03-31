@@ -1,4 +1,5 @@
 # SwiftDown
+[![codecov](https://codecov.io/gh/qeude/SwiftDown/branch/main/graph/badge.svg?token=RB6K3Q5QIO)](https://codecov.io/gh/qeude/SwiftDown)
 
 ## 📖 Description
 Markdown Editor SwiftUI package.

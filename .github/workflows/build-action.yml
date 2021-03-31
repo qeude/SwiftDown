@@ -13,7 +13,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Build
+    - name: Build & Tests
       run: xcodebuild test -scheme SwiftDown -destination platform="macOS" -enableCodeCoverage YES
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1.3.1
