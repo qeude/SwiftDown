@@ -19,13 +19,4 @@ final class ThemConfigPropertyTests: XCTestCase {
   func testUnknowTraitConfigPropertyPropertyProperty() {
     expect(TraitConfigProperty.from(rawValue: "test")).to(equal(.unknown))
   }
-  
-  static var allTests = [
-    (
-      "testUnknowConfigProperty", testUnknowConfigProperty,
-      "testUnknowEditorConfigProperty", testUnknowEditorConfigProperty,
-      "testUnknowStyleConfigPropertyProperty", testUnknowStyleConfigPropertyProperty,
-      "testUnknowTraitConfigPropertyPropertyProperty", testUnknowTraitConfigPropertyPropertyProperty
-     )
-  ]
 }

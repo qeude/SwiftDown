@@ -21,12 +21,4 @@ final class ThemeTests: XCTestCase {
       _ = Theme("non_existing_file")
     }.to(throwAssertion())
   }
-
-  static var allTests = [
-    (
-      "testParsingTheme", testParsingTheme,
-      "testParsingThemeStyles", testParsingThemeStyles,
-      "testInitNonExistingFile", testInitNonExistingFile
-     )
-  ]
 }

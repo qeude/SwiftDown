@@ -80,20 +80,4 @@ final class UtilsTests: XCTestCase {
     expect(updatedFont?.fontDescriptor.pointSize).to(equal(16))
     expect(updatedFont?.fontDescriptor.symbolicTraits.rawValue).to(equal(font.fontDescriptor.symbolicTraits.rawValue))
   }
-
-  static var allTests = [
-    ("testColorFrom12bitsHexa", testColorFrom12bitsHexa,
-     "testColorFrom24bitsHexa", testColorFrom24bitsHexa,
-     "testColorFrom32bitsHexa", testColorFrom32bitsHexa,
-     "testColorFromHexaFallback", testColorFromHexaFallback,
-     "testNSRangeFromRange", testNSRangeFromRange,
-     "testRangeFromNSRange", testRangeFromNSRange,
-     "testGetParagraph", testGetParagraph,
-     "testGetParagraphFirstParagraph", testGetParagraphFirstParagraph,
-     "testGetParagraphLastParagraph", testGetParagraphLastParagraph,
-     "testGetParagraphRangeNil", testGetParagraphRangeNil,
-     "testFontFromTraitsAndSize", testFontFromTraitsAndSize,
-     "testFontFromTraitsAndSizeWithUnknownTraits", testFontFromTraitsAndSizeWithUnknownTraits
-     )
-  ]
 }

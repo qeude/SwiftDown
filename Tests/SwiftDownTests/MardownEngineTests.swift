@@ -53,11 +53,4 @@ final class MarkdownEngineTests: XCTestCase {
     ]
     expect(mardownNodes).to(equal(expectedMarkdownNodes))
   }
-  
-  static var allTests = [
-    (
-      "testRender", testRender,
-      "testRenderWithOffset", testRenderWithOffset
-     )
-  ]
 }
