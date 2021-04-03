@@ -41,7 +41,6 @@ public class Storage: NSTextStorage {
     super.init()
 
     subj
-      .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
       .removeDuplicates()
       .sink(receiveValue: { s in
         self.applyStyles(editedRange: s.editedRange)
