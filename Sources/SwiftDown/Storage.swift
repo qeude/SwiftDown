@@ -103,7 +103,9 @@ public class Storage: NSTextStorage {
   }
 
   override public func processEditing() {
-    subj.send(EditedText(string: backingStore.string, editedRange: self.editedRange))
+    if self.editedMask != .editedAttributes {
+      subj.send(EditedText(string: backingStore.string, editedRange: self.editedRange))
+    }
     super.processEditing()
   }
 
