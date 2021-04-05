@@ -44,7 +44,9 @@ public class Storage: NSTextStorage {
       .removeDuplicates()
       .debounce(for: .milliseconds(50), scheduler: DispatchQueue.main)
       .sink(receiveValue: { s in
+        self.beginEditing()
         self.applyStyles(editedRange: s.editedRange)
+        self.endEditing()
       })
       .store(in: &cancellables)
   }
