@@ -2,7 +2,7 @@
 [![codecov](https://codecov.io/gh/qeude/SwiftDown/branch/main/graph/badge.svg?token=RB6K3Q5QIO)](https://codecov.io/gh/qeude/SwiftDown)
 
 ## 📖 Description
-Markdown Editor SwiftUI package.
+A markdown editor component for your SwiftUI apps.
 
 - 🎉 Live preview directly in editor for most of Markdown elements, without web based preview.
 - ⚡️ Fast, built on top of [cmark](https://github.com/commonmark/cmark).
