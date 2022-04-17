@@ -34,6 +34,9 @@ public struct SwiftDownEditor: UIViewRepresentable {
 
     public func makeUIView(context: Context) -> UITextView {
       let swiftDown = SwiftDown(frame: .zero, theme: theme)
+      swiftDown.storage.markdowner =  { self.engine.render($0, offset: $1) }
+      swiftDown.storage.applyMarkdown = { m in Theme.applyMarkdown(markdown: m, with: self.theme) }
+      swiftDown.storage.applyBody = { Theme.applyBody(with: self.theme) }
       swiftDown.delegate = context.coordinator
       swiftDown.text = text
       swiftDown.isEditable = true
@@ -46,9 +49,6 @@ public struct SwiftDownEditor: UIViewRepresentable {
       swiftDown.backgroundColor = theme.backgroundColor
       swiftDown.tintColor = theme.tintColor
       swiftDown.textColor = theme.tintColor
-      swiftDown.storage.markdowner =  { self.engine.render($0, offset: $1) }
-      swiftDown.storage.applyMarkdown = { m in Theme.applyMarkdown(markdown: m, with: self.theme) }
-      swiftDown.storage.applyBody = { Theme.applyBody(with: self.theme) }
       return swiftDown
     }
 
