@@ -52,7 +52,9 @@ public struct SwiftDownEditor: UIViewRepresentable {
       return swiftDown
     }
 
-    public func updateUIView(_ uiView: UITextView, context: Context) {}
+    public func updateUIView(_ uiView: UITextView, context: Context) {
+      uiView.text = text
+    }
   
     public func makeCoordinator() -> Coordinator {
       Coordinator(self)
@@ -128,7 +130,9 @@ public struct SwiftDownEditor: UIViewRepresentable {
       return swiftDown
     }
 
-    public func updateNSView(_ nsView: SwiftDown, context: Context) {}
+    public func updateNSView(_ nsView: SwiftDown, context: Context) {
+      nsView.text = text
+    }
 
     public func makeCoordinator() -> Coordinator {
       Coordinator(self)
