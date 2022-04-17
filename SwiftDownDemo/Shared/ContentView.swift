@@ -9,12 +9,18 @@ import SwiftUI
 import SwiftDown
 
 struct ContentView: View {
-  @State private var text: String = ""
+  @State private var text: String = "Reply"
   
   var body: some View {
-    SwiftDownEditor(text: $text)
-      .insetsSize(40)
-      .theme(Theme.BuiltIn.defaultDark.theme())
+    VStack {
+      SwiftDownEditor(text: $text).frame(height: 50)
+      TextField("", text: $text).frame(height: 50)
+      Button {
+        self.text = ""
+      } label: {
+        Text("Clear")
+      }
+    }
   }
 }
 
