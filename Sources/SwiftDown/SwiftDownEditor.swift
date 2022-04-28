@@ -176,7 +176,7 @@ extension SwiftDownEditor {
 
   public func isEditable(_ isEditable: Bool) -> Self {
     var editor = self
-    editor.isEditable = true
+    editor.isEditable = isEditable
     return editor
   }
 }
