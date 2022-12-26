@@ -11,6 +11,7 @@
   //MARK: - SwiftDown iOS
   public class SwiftDown: UITextView, UITextViewDelegate {
     var storage: Storage = Storage()
+    var highlighter: SwiftDownHighligther?
 
     convenience init(frame: CGRect, theme: Theme) {
       self.init(frame: frame, textContainer: nil)
@@ -41,6 +42,10 @@
       layoutManager.addTextContainer(container)
       storage.addLayoutManager(layoutManager)
       self.delegate = self
+    }
+
+    public override func willMove(toSuperview newSuperview: UIView?) {
+      self.highlighter = SwiftDownHighligther(textView: self)
     }
   }
 #else
@@ -91,10 +96,20 @@
     }
 
     let engine = MarkdownEngine()
+    var highlighter: SwiftDownHighligther!
 
     var text: String {
       didSet {
         textView.string = text
+      }
+    }
+
+    var selectedRanges: [NSValue] {
+      get {
+        textView.selectedRanges
+      }
+      set(value) {
+        textView.selectedRanges = value
       }
     }
 
@@ -177,6 +192,12 @@
 
     func setupTextView() {
       scrollView.documentView = textView
+      highlighter = SwiftDownHighligther(textView: textView)
+    }
+
+    func applyStyles() {
+      assert(highlighter != nil)
+      highlighter.applyStyles()
     }
   }
 #endif
