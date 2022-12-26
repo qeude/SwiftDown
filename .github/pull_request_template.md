@@ -1,6 +1,6 @@
 ## Description
 
-<!-- A summary of your change. It can be a linked issue or a quick descirption. -->
+<!-- A summary of your change. It can be a linked issue or a quick description. -->
 
 ## Example
 

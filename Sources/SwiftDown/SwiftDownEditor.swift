@@ -52,7 +52,6 @@ public struct SwiftDownEditor: UIViewRepresentable {
       swiftDown.backgroundColor = theme.backgroundColor
       swiftDown.tintColor = theme.tintColor
       swiftDown.textColor = theme.tintColor
-      swiftDown.text = text
       return swiftDown
     }
 
