@@ -131,8 +131,7 @@ public struct SwiftDownEditor: UIViewRepresentable {
     }
 
     public func makeNSView(context: Context) -> SwiftDown {
-      let swiftDown = SwiftDown(
-        text: text, theme: theme, isEditable: isEditable, insetsSize: insetsSize)
+      let swiftDown = SwiftDown(theme: theme, isEditable: isEditable, insetsSize: insetsSize)
       swiftDown.delegate = context.coordinator
       return swiftDown
     }

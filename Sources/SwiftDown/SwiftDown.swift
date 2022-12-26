@@ -84,7 +84,11 @@
     private var isEditable: Bool
     private var insetsSize: CGFloat
 
-    weak var delegate: NSTextViewDelegate?
+    weak var delegate: NSTextViewDelegate? {
+      didSet {
+        textView.delegate = delegate
+      }
+    }
 
     let engine = MarkdownEngine()
 
@@ -137,10 +141,10 @@
     }()
 
     init(
-      text: String, theme: Theme, isEditable: Bool, insetsSize: CGFloat = 0
+      theme: Theme, isEditable: Bool, insetsSize: CGFloat = 0
     ) {
       self.isEditable = isEditable
-      self.text = text
+      self.text = ""
       self.theme = theme
       self.insetsSize = insetsSize
 
