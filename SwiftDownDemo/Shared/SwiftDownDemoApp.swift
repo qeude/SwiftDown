@@ -9,9 +9,17 @@ import SwiftUI
 
 @main
 struct SwiftDownDemoApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
+  var body: some Scene {
+    WindowGroup {
+      NavigationView {
+        List {
+          ForEach((0..<10).indices, id: \.self) { item in
+            NavigationLink("\(item)") {
+              ContentView()
+            }
+          }
         }
+      }
     }
+  }
 }
