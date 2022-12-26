@@ -11,7 +11,11 @@ import SwiftUI
 #if os(iOS)
   // MARK: - SwiftDownEditor iOS
 public struct SwiftDownEditor: UIViewRepresentable {
-    @Binding var text: String
+  @Binding var text: String {
+    didSet {
+      onTextChange(text)
+    }
+  }
 
     private(set) var isEditable: Bool = true
     private(set) var theme: Theme = Theme.BuiltIn.defaultDark.theme()
@@ -38,7 +42,6 @@ public struct SwiftDownEditor: UIViewRepresentable {
       swiftDown.storage.applyMarkdown = { m in Theme.applyMarkdown(markdown: m, with: self.theme) }
       swiftDown.storage.applyBody = { Theme.applyBody(with: self.theme) }
       swiftDown.delegate = context.coordinator
-      swiftDown.text = text
       swiftDown.isEditable = true
       swiftDown.isScrollEnabled = true
       swiftDown.keyboardType = keyboardType
@@ -49,6 +52,7 @@ public struct SwiftDownEditor: UIViewRepresentable {
       swiftDown.backgroundColor = theme.backgroundColor
       swiftDown.tintColor = theme.tintColor
       swiftDown.textColor = theme.tintColor
+      swiftDown.text = text
       return swiftDown
     }
 
@@ -107,7 +111,11 @@ public struct SwiftDownEditor: UIViewRepresentable {
 #else
   // MARK: - SwiftDownEditor macOS
   public struct SwiftDownEditor: NSViewRepresentable {
-    @Binding var text: String
+    @Binding var text: String {
+      didSet {
+        onTextChange(text)
+      }
+    }
 
     private(set) var isEditable: Bool = true
     private(set) var theme: Theme = Theme.BuiltIn.defaultDark.theme()
