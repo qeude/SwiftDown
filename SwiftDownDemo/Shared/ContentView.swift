@@ -18,11 +18,10 @@ struct ContentView: View {
         print("onTextChange")
       })
       .focused($focusedField, equals: .field)
-      .frame(height: 400)
       .onAppear {
         self.focusedField = .field
       }
-      TextField("", text: $text).frame(height: 50)
+      TextEditor(text: $text)
       Button {
         self.text = ""
       } label: {
