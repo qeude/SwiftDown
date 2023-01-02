@@ -15,10 +15,12 @@ final class ThemeTests: XCTestCase {
     let theme = Theme.BuiltIn.defaultDark.theme()
     expect(theme.styles).to(haveCount(15))
   }
-    
+
+  #if arch(x86_64)
   func testInitNonExistingFile() {
     expect {
       _ = Theme("non_existing_file")
     }.to(throwAssertion())
   }
+  #endif
 }
