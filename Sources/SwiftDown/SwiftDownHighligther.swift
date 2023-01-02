@@ -27,7 +27,6 @@ class SwiftDownHighligther {
   }
 }
 
-
 #else
 import AppKit
 

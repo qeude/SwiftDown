@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.7
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -6,8 +6,8 @@ import PackageDescription
 let package = Package(
   name: "SwiftDown",
   platforms: [
-    .macOS(.v10_15),
-    .iOS(.v13),
+    .macOS(.v12),
+    .iOS(.v14),
   ],
   products: [
     .library(
@@ -20,14 +20,15 @@ let package = Package(
       from: "0.11.0"
     ),
     .package(url: "https://github.com/Quick/Nimble.git", .upToNextMajor(from: "9.0.0")),
-
+    .package(url: "https://github.com/realm/SwiftLint.git", branch: "main")
   ],
   targets: [
     .target(
       name: "SwiftDown",
       dependencies: ["Down"],
       exclude: ["../../SwiftDownDemo"],
-      resources: [.copy("Resources/Themes")]
+      resources: [.copy("Resources/Themes")],
+      plugins: [.plugin(name: "SwiftLintPlugin", package: "SwiftLint")]
     ),
     .testTarget(
       name: "SwiftDownTests",

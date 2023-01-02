@@ -19,7 +19,7 @@ enum ConfigProperty {
 
   private static let mapping: [String: ConfigProperty] = [
     "editor": .editor,
-    "styles": .styles,
+    "styles": .styles
   ]
 
 }
@@ -38,7 +38,7 @@ enum EditorConfigProperty {
   private static let mapping: [String: EditorConfigProperty] = [
     "backgroundColor": .backgroundColor,
     "tintColor": .tintColor,
-    "cursorColor": .cursorColor,
+    "cursorColor": .cursorColor
   ]
 }
 
@@ -58,7 +58,7 @@ enum StyleConfigProperty {
     "font": .font,
     "size": .size,
     "color": .color,
-    "traits": .traits,
+    "traits": .traits
   ]
 }
 
@@ -78,7 +78,7 @@ enum TraitConfigProperty {
     "bold": .bold,
     "italic": .italic,
     "expanded": .expanded,
-    "condensed": .condensed,
+    "condensed": .condensed
   ]
 
 }
