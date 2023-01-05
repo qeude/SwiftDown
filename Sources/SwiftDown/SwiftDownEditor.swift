@@ -38,7 +38,7 @@ public struct SwiftDownEditor: UIViewRepresentable {
 
     public func makeUIView(context: Context) -> SwiftDown {
       let swiftDown = SwiftDown(frame: .zero, theme: theme)
-      swiftDown.storage.markdowner =  { self.engine.render($0, offset: $1) }
+      swiftDown.storage.markdowner = { self.engine.render($0, offset: $1) }
       swiftDown.storage.applyMarkdown = { m in Theme.applyMarkdown(markdown: m, with: self.theme) }
       swiftDown.storage.applyBody = { Theme.applyBody(with: self.theme) }
       swiftDown.delegate = context.coordinator
@@ -62,7 +62,7 @@ public struct SwiftDownEditor: UIViewRepresentable {
       uiView.highlighter?.applyStyles()
       uiView.selectedRange = selectedRange
     }
-  
+
     public func makeCoordinator() -> Coordinator {
       Coordinator(self)
     }

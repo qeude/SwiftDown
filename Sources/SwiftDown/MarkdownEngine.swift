@@ -17,8 +17,7 @@ public class MarkdownEngine {
   private func toMarkdownNode(_ node: Node, offset: Int) -> MarkdownNode? {
     let p = node.cmarkNode.pointee
     if let type = MarkdownNode.MarkdownType.from(
-      rawValue: Int(p.type), with: node.cmarkNode.headingLevel)
-    {
+      rawValue: Int(p.type), with: node.cmarkNode.headingLevel) {
       let s = lines[Int(p.start_line) - 1] + Int(p.start_column) - 1
       let e = lines[Int(p.end_line) - 1] + Int(p.end_column) - 1
 

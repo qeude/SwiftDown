@@ -89,8 +89,7 @@ public class Storage: NSTextStorage {
   }
 
   public override func attributes(at location: Int, effectiveRange range: NSRangePointer?)
-    -> [NSAttributedString.Key: Any]
-  {
+    -> [NSAttributedString.Key: Any] {
     return backingStore.attributes(at: location, effectiveRange: range)
   }
 

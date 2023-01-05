@@ -74,16 +74,14 @@ public struct Theme {
     attributes.forEach { key, value in
       if let value = value as? [String: AnyObject],
         let style = configureStyle(value as [String: AnyObject]),
-        let mdType = MarkdownNode.MarkdownType.from(string: key)
-      {
+        let mdType = MarkdownNode.MarkdownType.from(string: key) {
         styles[mdType] = Style(attributes: style)
       }
     }
   }
 
   mutating private func configureStyle(_ attributes: [String: AnyObject]) -> [NSAttributedString
-    .Key: Any]?
-  {
+    .Key: Any]? {
     var stringAttributes: [NSAttributedString.Key: Any] = [:]
     var fontSize: CGFloat = 15
     var font: UniversalFont? = UniversalFont.systemFont(ofSize: fontSize)
@@ -150,8 +148,7 @@ public struct Theme {
 
   // MARK: - Static methods
   static func applyMarkdown(markdown: MarkdownNode, with theme: Theme) -> [NSAttributedString.Key:
-    Any]
-  {
+    Any] {
     guard let attributes = theme.styles[markdown.type]?.attributes else { return [:] }
     return attributes
   }

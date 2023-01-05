@@ -8,7 +8,7 @@
 #if os(iOS)
   import UIKit
 
-  //MARK: - SwiftDown iOS
+  // MARK: - SwiftDown iOS
   public class SwiftDown: UITextView, UITextViewDelegate {
     var storage: Storage = Storage()
     var highlighter: SwiftDownHighligther?
@@ -51,7 +51,7 @@
 #else
   import AppKit
 
-  //MARK: - CustomTextView
+  // MARK: - CustomTextView
   class CustomTextView: NSTextView {
     var storage: Storage = Storage()
 
@@ -186,7 +186,7 @@
         scrollView.topAnchor.constraint(equalTo: topAnchor),
         scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
         scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
-        scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
+        scrollView.leadingAnchor.constraint(equalTo: leadingAnchor)
       ])
     }
 
