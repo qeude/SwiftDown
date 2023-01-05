@@ -11,7 +11,11 @@ import SwiftUI
 #if os(iOS)
   // MARK: - SwiftDownEditor iOS
 public struct SwiftDownEditor: UIViewRepresentable {
-    @Binding var text: String
+  @Binding var text: String {
+    didSet {
+      onTextChange(text)
+    }
+  }
 
     private(set) var isEditable: Bool = true
     private(set) var theme: Theme = Theme.BuiltIn.defaultDark.theme()
@@ -32,13 +36,12 @@ public struct SwiftDownEditor: UIViewRepresentable {
       self.onTextChange = onTextChange
     }
 
-    public func makeUIView(context: Context) -> UITextView {
+    public func makeUIView(context: Context) -> SwiftDown {
       let swiftDown = SwiftDown(frame: .zero, theme: theme)
-      swiftDown.storage.markdowner =  { self.engine.render($0, offset: $1) }
+      swiftDown.storage.markdowner = { self.engine.render($0, offset: $1) }
       swiftDown.storage.applyMarkdown = { m in Theme.applyMarkdown(markdown: m, with: self.theme) }
       swiftDown.storage.applyBody = { Theme.applyBody(with: self.theme) }
       swiftDown.delegate = context.coordinator
-      swiftDown.text = text
       swiftDown.isEditable = true
       swiftDown.isScrollEnabled = true
       swiftDown.keyboardType = keyboardType
@@ -49,13 +52,17 @@ public struct SwiftDownEditor: UIViewRepresentable {
       swiftDown.backgroundColor = theme.backgroundColor
       swiftDown.tintColor = theme.tintColor
       swiftDown.textColor = theme.tintColor
+      swiftDown.text = text
       return swiftDown
     }
 
-    public func updateUIView(_ uiView: UITextView, context: Context) {
+    public func updateUIView(_ uiView: SwiftDown, context: Context) {
+      let selectedRange = uiView.selectedRange
       uiView.text = text
+      uiView.highlighter?.applyStyles()
+      uiView.selectedRange = selectedRange
     }
-  
+
     public func makeCoordinator() -> Coordinator {
       Coordinator(self)
     }
@@ -73,7 +80,9 @@ public struct SwiftDownEditor: UIViewRepresentable {
       public func textViewDidChange(_ textView: UITextView) {
         guard textView.markedTextRange == nil else { return }
 
-        self.parent.text = textView.text
+        DispatchQueue.main.async {
+          self.parent.text = textView.text
+        }
       }
     }
   }
@@ -107,7 +116,11 @@ public struct SwiftDownEditor: UIViewRepresentable {
 #else
   // MARK: - SwiftDownEditor macOS
   public struct SwiftDownEditor: NSViewRepresentable {
-    @Binding var text: String
+    @Binding var text: String {
+      didSet {
+        onTextChange(text)
+      }
+    }
 
     private(set) var isEditable: Bool = true
     private(set) var theme: Theme = Theme.BuiltIn.defaultDark.theme()
@@ -124,14 +137,18 @@ public struct SwiftDownEditor: UIViewRepresentable {
     }
 
     public func makeNSView(context: Context) -> SwiftDown {
-      let swiftDown = SwiftDown(
-        text: text, theme: theme, isEditable: isEditable, insetsSize: insetsSize)
+      let swiftDown = SwiftDown(theme: theme, isEditable: isEditable, insetsSize: insetsSize)
       swiftDown.delegate = context.coordinator
+      swiftDown.setupTextView()
+      swiftDown.text = text
       return swiftDown
     }
 
     public func updateNSView(_ nsView: SwiftDown, context: Context) {
+      let selectedRanges = nsView.selectedRanges
       nsView.text = text
+      nsView.applyStyles()
+      nsView.selectedRanges = selectedRanges
     }
 
     public func makeCoordinator() -> Coordinator {

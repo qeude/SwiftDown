@@ -39,15 +39,6 @@ public class Storage: NSTextStorage {
 
   override public init() {
     super.init()
-
-    subj
-      .removeDuplicates()
-      .sink(receiveValue: { s in
-        self.beginEditing()
-        self.applyStyles(editedRange: s.editedRange)
-        self.endEditing()
-      })
-      .store(in: &cancellables)
   }
 
   override public init(attributedString attrStr: NSAttributedString) {
@@ -86,7 +77,7 @@ public class Storage: NSTextStorage {
     backingStore.replaceCharacters(in: range, with: str)
     let len = (str as NSString).length
     let change = len - range.length
-    self.edited([.editedCharacters, .editedAttributes], range: range, changeInLength: change)
+    self.edited([.editedCharacters], range: range, changeInLength: change)
     self.endEditing()
   }
 
@@ -98,16 +89,8 @@ public class Storage: NSTextStorage {
   }
 
   public override func attributes(at location: Int, effectiveRange range: NSRangePointer?)
-    -> [NSAttributedString.Key: Any]
-  {
+    -> [NSAttributedString.Key: Any] {
     return backingStore.attributes(at: location, effectiveRange: range)
-  }
-
-  override public func processEditing() {
-    if self.editedMask != .editedAttributes {
-      subj.send(EditedText(string: backingStore.string, editedRange: self.editedRange))
-    }
-    super.processEditing()
   }
 
   func applyStyles(editedRange: NSRange? = nil) {

@@ -8,9 +8,10 @@
 #if os(iOS)
   import UIKit
 
-  //MARK: - SwiftDown iOS
+  // MARK: - SwiftDown iOS
   public class SwiftDown: UITextView, UITextViewDelegate {
     var storage: Storage = Storage()
+    var highlighter: SwiftDownHighligther?
 
     convenience init(frame: CGRect, theme: Theme) {
       self.init(frame: frame, textContainer: nil)
@@ -42,11 +43,15 @@
       storage.addLayoutManager(layoutManager)
       self.delegate = self
     }
+
+    public override func willMove(toSuperview newSuperview: UIView?) {
+      self.highlighter = SwiftDownHighligther(textView: self)
+    }
   }
 #else
   import AppKit
 
-  //MARK: - CustomTextView
+  // MARK: - CustomTextView
   class CustomTextView: NSTextView {
     var storage: Storage = Storage()
 
@@ -84,13 +89,27 @@
     private var isEditable: Bool
     private var insetsSize: CGFloat
 
-    weak var delegate: NSTextViewDelegate?
+    weak var delegate: NSTextViewDelegate? {
+      didSet {
+        textView.delegate = delegate
+      }
+    }
 
     let engine = MarkdownEngine()
+    var highlighter: SwiftDownHighligther!
 
     var text: String {
       didSet {
         textView.string = text
+      }
+    }
+
+    var selectedRanges: [NSValue] {
+      get {
+        textView.selectedRanges
+      }
+      set(value) {
+        textView.selectedRanges = value
       }
     }
 
@@ -137,10 +156,10 @@
     }()
 
     init(
-      text: String, theme: Theme, isEditable: Bool, insetsSize: CGFloat = 0
+      theme: Theme, isEditable: Bool, insetsSize: CGFloat = 0
     ) {
       self.isEditable = isEditable
-      self.text = text
+      self.text = ""
       self.theme = theme
       self.insetsSize = insetsSize
 
@@ -167,12 +186,18 @@
         scrollView.topAnchor.constraint(equalTo: topAnchor),
         scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
         scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
-        scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
+        scrollView.leadingAnchor.constraint(equalTo: leadingAnchor)
       ])
     }
 
     func setupTextView() {
       scrollView.documentView = textView
+      highlighter = SwiftDownHighligther(textView: textView)
+    }
+
+    func applyStyles() {
+      assert(highlighter != nil)
+      highlighter.applyStyles()
     }
   }
 #endif
