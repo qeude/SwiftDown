@@ -52,7 +52,7 @@ public struct SwiftDownEditor: UIViewRepresentable {
       _selectedRange = selectedRange
       self.onTextChange = onTextChange
     }
-  
+
     public func makeUIView(context: Context) -> SwiftDown {
       let swiftDown = SwiftDown(frame: .zero, theme: theme)
       swiftDown.storage.markdowner = { self.engine.render($0, offset: $1) }
@@ -101,9 +101,13 @@ public struct SwiftDownEditor: UIViewRepresentable {
           self.parent.text = textView.text
         }
       }
-      
+
       public func textViewDidChangeSelection(_ textView: UITextView) {
-        self.parent.selectedRange = textView.selectedRange
+        guard textView.markedTextRange == nil else { return }
+
+        DispatchQueue.main.async {
+          self.parent.selectedRange = textView.selectedRange
+        }
       }
     }
   }
