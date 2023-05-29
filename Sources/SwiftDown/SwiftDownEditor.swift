@@ -43,6 +43,16 @@ public struct SwiftDownEditor: UIViewRepresentable {
       self.onTextChange = onTextChange
     }
 
+    public init(
+      text: Binding<String>,
+      selectedRange: Binding<NSRange>,
+      onTextChange: @escaping (String) -> Void = { _ in }
+    ) {
+      _text = text
+      _selectedRange = selectedRange
+      self.onTextChange = onTextChange
+    }
+  
     public func makeUIView(context: Context) -> SwiftDown {
       let swiftDown = SwiftDown(frame: .zero, theme: theme)
       swiftDown.storage.markdowner = { self.engine.render($0, offset: $1) }
@@ -154,6 +164,16 @@ public struct SwiftDownEditor: UIViewRepresentable {
       _selectedRange = .constant(NSRange())
       self.onTextChange = onTextChange
     }
+    
+    public init(
+      text: Binding<String>,
+      selectedRange: Binding<NSRange>,
+      onTextChange: @escaping (String) -> Void = { _ in }
+    ) {
+      _text = text
+      _selectedRange = selectedRange
+      self.onTextChange = onTextChange
+    }
 
     public func makeNSView(context: Context) -> SwiftDown {
       let swiftDown = SwiftDown(theme: theme, isEditable: isEditable, insetsSize: insetsSize)
@@ -223,6 +243,7 @@ extension SwiftDownEditor {
     editor.onSelectedRangeChange = f
     return editor
   }
+  
   public func isEditable(_ isEditable: Bool) -> Self {
     var editor = self
     editor.isEditable = isEditable
