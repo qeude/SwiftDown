@@ -16,6 +16,11 @@ public struct SwiftDownEditor: UIViewRepresentable {
       onTextChange(text)
     }
   }
+    @Binding var selectedRange: NSRange {
+      didSet {
+        onSelectedRangeChange(selectedRange)
+      }
+    }
 
     private(set) var isEditable: Bool = true
     private(set) var theme: Theme = Theme.BuiltIn.defaultDark.theme()
@@ -26,6 +31,7 @@ public struct SwiftDownEditor: UIViewRepresentable {
     private(set) var textAlignment: TextAlignment = .leading
 
     public var onTextChange: (String) -> Void = { _ in }
+    private(set) var onSelectedRangeChange: (NSRange) -> Void = { _ in }
     let engine = MarkdownEngine()
 
     public init(
@@ -33,6 +39,7 @@ public struct SwiftDownEditor: UIViewRepresentable {
       onTextChange: @escaping (String) -> Void = { _ in }
     ) {
       _text = text
+      _selectedRange = .constant(NSRange())
       self.onTextChange = onTextChange
     }
 
@@ -84,6 +91,10 @@ public struct SwiftDownEditor: UIViewRepresentable {
           self.parent.text = textView.text
         }
       }
+      
+      public func textViewDidChangeSelection(_ textView: UITextView) {
+        self.parent.selectedRange = textView.selectedRange
+      }
     }
   }
 
@@ -122,17 +133,25 @@ public struct SwiftDownEditor: UIViewRepresentable {
       }
     }
 
+    @Binding var selectedRange: NSRange {
+      didSet {
+        onSelectedRangeChange(selectedRange)
+      }
+    }
+    
     private(set) var isEditable: Bool = true
     private(set) var theme: Theme = Theme.BuiltIn.defaultDark.theme()
     private(set) var insetsSize: CGFloat = 0
 
     public var onTextChange: (String) -> Void = { _ in }
+    private(set) var onSelectedRangeChange: (NSRange) -> Void = { _ in }
 
     public init(
       text: Binding<String>,
       onTextChange: @escaping (String) -> Void = { _ in }
     ) {
       _text = text
+      _selectedRange = .constant(NSRange())
       self.onTextChange = onTextChange
     }
 
@@ -172,6 +191,14 @@ public struct SwiftDownEditor: UIViewRepresentable {
         }
 
         self.parent.text = textView.string
+      }
+      
+      public func textViewDidChangeSelection(_ notification: Notification) {
+        guard let textView = notification.object as? NSTextView else {
+          return
+        }
+
+        self.parent.selectedRange = textView.selectedRange()
       }
     }
   }
