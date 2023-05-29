@@ -218,6 +218,11 @@ extension SwiftDownEditor {
     return editor
   }
 
+  public func onSelectedRangeChange(_ f:@escaping (NSRange) -> Void) -> Self {
+    var editor = self
+    editor.onSelectedRangeChange = f
+    return editor
+  }
   public func isEditable(_ isEditable: Bool) -> Self {
     var editor = self
     editor.isEditable = isEditable
