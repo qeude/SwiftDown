@@ -17,11 +17,7 @@ public struct SwiftDownEditor: UIViewRepresentable {
     }
   }
 
-    @Binding var selectedRange: NSRange {
-      didSet {
-        onSelectedRangeChange(selectedRange)
-      }
-    }
+    @Binding var selectedRange: NSRange
 
     private(set) var isEditable: Bool = true
     private(set) var theme: Theme = Theme.BuiltIn.defaultDark.theme()
@@ -32,7 +28,6 @@ public struct SwiftDownEditor: UIViewRepresentable {
     private(set) var textAlignment: TextAlignment = .leading
 
     public var onTextChange: (String) -> Void = { _ in }
-    private(set) var onSelectedRangeChange: (NSRange) -> Void = { _ in }
     let engine = MarkdownEngine()
 
     public init(
@@ -40,12 +35,7 @@ public struct SwiftDownEditor: UIViewRepresentable {
       onTextChange: @escaping (String) -> Void = { _ in }
     ) {
       _text = text
-      var dummy = NSRange()
-      _selectedRange = .init(get: {
-        dummy
-      }, set: { rng in
-        dummy = rng
-      })
+      _selectedRange = .constant(NSRange())
       self.onTextChange = onTextChange
     }
 
@@ -153,30 +143,20 @@ public struct SwiftDownEditor: UIViewRepresentable {
       }
     }
 
-    @Binding var selectedRange: NSRange {
-      didSet {
-        onSelectedRangeChange(selectedRange)
-      }
-    }
+    @Binding var selectedRange: NSRange
     
     private(set) var isEditable: Bool = true
     private(set) var theme: Theme = Theme.BuiltIn.defaultDark.theme()
     private(set) var insetsSize: CGFloat = 0
 
     public var onTextChange: (String) -> Void = { _ in }
-    private(set) var onSelectedRangeChange: (NSRange) -> Void = { _ in }
 
     public init(
       text: Binding<String>,
       onTextChange: @escaping (String) -> Void = { _ in }
     ) {
       _text = text
-      var dummy = NSRange()
-      _selectedRange = .init(get: {
-        dummy
-      }, set: { rng in
-        dummy = rng
-      })
+      _selectedRange = .constant(NSRange())
       self.onTextChange = onTextChange
     }
     
@@ -250,12 +230,6 @@ extension SwiftDownEditor {
   public func theme(_ theme: Theme) -> Self {
     var editor = self
     editor.theme = theme
-    return editor
-  }
-
-  public func onSelectedRangeChange(_ f:@escaping (NSRange) -> Void) -> Self {
-    var editor = self
-    editor.onSelectedRangeChange = f
     return editor
   }
   

@@ -10,25 +10,26 @@ import SwiftDown
 
 struct ContentView: View {
   @State private var text: String = "# H1\n## H2\n### H3\n#### H4\n##### H5\n###### H6\n**bold** __bold__\n*italic* _italic_\n`inline code`\n```\ncode block\n```\n\n> block quote\n\n- list\n\n1. list\n\n[link](link)\n\nbody"
+  @State private var selectedRange: NSRange = NSRange()
   @FocusState private var focusedField: FocusField?
 
   var body: some View {
     VStack {
-      SwiftDownEditor(text: $text, onTextChange: { text in
+      SwiftDownEditor(text: $text, selectedRange: $selectedRange, onTextChange: { text in
         print("onTextChange")
-      })
-      .onSelectedRangeChange({ rng in
-        print("onSelectedRangeChange", rng)
       })
       .focused($focusedField, equals: .field)
       .onAppear {
         self.focusedField = .field
       }
       TextEditor(text: $text)
-      Button {
-        self.text = ""
-      } label: {
-        Text("Clear")
+      HStack {
+        Text("selected \(selectedRange.description)")
+        Button {
+          self.text = ""
+        } label: {
+          Text("Clear")
+        }
       }
     }
   }
