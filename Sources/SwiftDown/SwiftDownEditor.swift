@@ -207,13 +207,14 @@ public struct SwiftDownEditor: UIViewRepresentable {
 
         self.parent.text = textView.string
       }
-      
+
       public func textViewDidChangeSelection(_ notification: Notification) {
         guard let textView = notification.object as? NSTextView else {
           return
         }
-
-        self.parent.selectedRange = textView.selectedRange()
+        DispatchQueue.main.async {
+          self.parent.selectedRange = textView.selectedRange()
+        }
       }
     }
   }
@@ -232,7 +233,7 @@ extension SwiftDownEditor {
     editor.theme = theme
     return editor
   }
-  
+
   public func isEditable(_ isEditable: Bool) -> Self {
     var editor = self
     editor.isEditable = isEditable
