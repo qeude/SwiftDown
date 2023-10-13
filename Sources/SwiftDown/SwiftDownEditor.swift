@@ -16,6 +16,7 @@ public struct SwiftDownEditor: UIViewRepresentable {
       onTextChange(text)
     }
   }
+
     @Binding var selectedRange: NSRange {
       didSet {
         onSelectedRangeChange(selectedRange)
@@ -39,7 +40,12 @@ public struct SwiftDownEditor: UIViewRepresentable {
       onTextChange: @escaping (String) -> Void = { _ in }
     ) {
       _text = text
-      _selectedRange = .constant(NSRange())
+      var dummy = NSRange()
+      _selectedRange = .init(get: {
+        dummy
+      }, set: { rng in
+        dummy = rng
+      })
       self.onTextChange = onTextChange
     }
 
@@ -165,7 +171,12 @@ public struct SwiftDownEditor: UIViewRepresentable {
       onTextChange: @escaping (String) -> Void = { _ in }
     ) {
       _text = text
-      _selectedRange = .constant(NSRange())
+      var dummy = NSRange()
+      _selectedRange = .init(get: {
+        dummy
+      }, set: { rng in
+        dummy = rng
+      })
       self.onTextChange = onTextChange
     }
     

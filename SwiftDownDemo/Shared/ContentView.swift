@@ -17,6 +17,9 @@ struct ContentView: View {
       SwiftDownEditor(text: $text, onTextChange: { text in
         print("onTextChange")
       })
+      .onSelectedRangeChange({ rng in
+        print("onSelectedRangeChange", rng)
+      })
       .focused($focusedField, equals: .field)
       .onAppear {
         self.focusedField = .field
