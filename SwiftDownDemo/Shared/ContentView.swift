@@ -17,7 +17,6 @@ struct ContentView: View {
       SwiftDownEditor(text: $text, onTextChange: { text in
         print("onTextChange")
       })
-      .debounceTime(0.3)
       .focused($focusedField, equals: .field)
       .onAppear {
         self.focusedField = .field
