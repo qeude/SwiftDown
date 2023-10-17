@@ -17,8 +17,6 @@ public struct SwiftDownEditor: UIViewRepresentable {
     }
   }
 
-    @Binding var selectedRange: NSRange
-
     private(set) var isEditable: Bool = true
     private(set) var theme: Theme = Theme.BuiltIn.defaultDark.theme()
     private(set) var insetsSize: CGFloat = 0
@@ -28,25 +26,17 @@ public struct SwiftDownEditor: UIViewRepresentable {
     private(set) var textAlignment: TextAlignment = .leading
 
     public var onTextChange: (String) -> Void = { _ in }
+    public var onSelectionChange: (NSRange) -> Void = { _ in }
     let engine = MarkdownEngine()
 
     public init(
       text: Binding<String>,
-      onTextChange: @escaping (String) -> Void = { _ in }
+      onTextChange: @escaping (String) -> Void = { _ in },
+      onSelectionChange: @escaping (NSRange) -> Void = { _ in }
     ) {
       _text = text
-      _selectedRange = .constant(NSRange())
       self.onTextChange = onTextChange
-    }
-
-    public init(
-      text: Binding<String>,
-      selectedRange: Binding<NSRange>,
-      onTextChange: @escaping (String) -> Void = { _ in }
-    ) {
-      _text = text
-      _selectedRange = selectedRange
-      self.onTextChange = onTextChange
+      self.onSelectionChange = onSelectionChange
     }
 
     public func makeUIView(context: Context) -> SwiftDown {
@@ -100,10 +90,7 @@ public struct SwiftDownEditor: UIViewRepresentable {
 
       public func textViewDidChangeSelection(_ textView: UITextView) {
         guard textView.markedTextRange == nil else { return }
-
-        DispatchQueue.main.async {
-          self.parent.selectedRange = textView.selectedRange
-        }
+        self.parent.onSelectionChange(textView.selectedRange)
       }
     }
   }
@@ -143,31 +130,21 @@ public struct SwiftDownEditor: UIViewRepresentable {
       }
     }
 
-    @Binding var selectedRange: NSRange
-    
     private(set) var isEditable: Bool = true
     private(set) var theme: Theme = Theme.BuiltIn.defaultDark.theme()
     private(set) var insetsSize: CGFloat = 0
 
     public var onTextChange: (String) -> Void = { _ in }
+    public var onSelectionChange: (NSRange) -> Void = { _ in }
 
     public init(
       text: Binding<String>,
-      onTextChange: @escaping (String) -> Void = { _ in }
+      onTextChange: @escaping (String) -> Void = { _ in },
+      onSelectionChange: @escaping (NSRange) -> Void = { _ in }
     ) {
       _text = text
-      _selectedRange = .constant(NSRange())
       self.onTextChange = onTextChange
-    }
-    
-    public init(
-      text: Binding<String>,
-      selectedRange: Binding<NSRange>,
-      onTextChange: @escaping (String) -> Void = { _ in }
-    ) {
-      _text = text
-      _selectedRange = selectedRange
-      self.onTextChange = onTextChange
+      self.onSelectionChange = onSelectionChange
     }
 
     public func makeNSView(context: Context) -> SwiftDown {
@@ -212,9 +189,7 @@ public struct SwiftDownEditor: UIViewRepresentable {
         guard let textView = notification.object as? NSTextView else {
           return
         }
-        DispatchQueue.main.async {
-          self.parent.selectedRange = textView.selectedRange()
-        }
+        self.parent.onSelectionChange(textView.selectedRange())
       }
     }
   }
