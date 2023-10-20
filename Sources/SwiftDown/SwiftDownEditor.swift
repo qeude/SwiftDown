@@ -13,7 +13,6 @@ import Combine
   // MARK: - SwiftDownEditor iOS
 public struct SwiftDownEditor: UIViewRepresentable {
   private var debounceTime = 0.3
-  private var styleUpdateCue = PassthroughSubject<Any, Never>()
   @Binding var text: String {
     didSet {
       onTextChange(text)
