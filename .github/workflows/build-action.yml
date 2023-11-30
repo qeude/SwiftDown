@@ -14,6 +14,8 @@ jobs:
     steps:
     - name: "⬇️ Checkout"
       uses: actions/checkout@v2
+    - name: "🔎 Linting"
+      uses: norio-nomura/action-swiftlint@3.2.1
     - name: "🧪 Build & Tests"
       run: xcodebuild test -scheme SwiftDown -destination platform="macOS" -enableCodeCoverage YES
     - name: "📊 Upload coverage to Codecov"
