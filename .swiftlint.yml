@@ -6,6 +6,7 @@ disabled_rules: # rule identifiers turned on by default to exclude from running
   - identifier_name
 opt_in_rules: # some rules are turned off by default, so you need to opt-in
   - empty_count # Find all the available rules by running: `swiftlint rules`
+  - indentation_width
 
 # Alternatively, specify all rules explicitly by uncommenting this option:
 # only_rules: # delete `disabled_rules` & `opt_in_rules` if using this
@@ -16,13 +17,10 @@ cyclomatic_complexity:
   ignores_case_statements: true
 
 included: # paths to include during linting. `--path` is ignored if present.
-  - Source
+  - Sources
 excluded: # paths to ignore during linting. Takes precedence over `included`.
   - Carthage
   - Pods
-  - Source/ExcludedFolder
-  - Source/ExcludedFile.swift
-  - Source/*/ExcludedFile.swift # Exclude files with a wildcard
 analyzer_rules: # Rules run by `swiftlint analyze` (experimental)
   - explicit_self
 
@@ -39,6 +37,8 @@ type_body_length:
   - 300 # warning
   - 400 # error
 # or they can set both explicitly
+indentation_width:
+  indentation_width: 2
 file_length:
   warning: 500
   error: 1200

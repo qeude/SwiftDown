@@ -20,15 +20,13 @@ let package = Package(
       from: "0.11.0"
     ),
     .package(url: "https://github.com/Quick/Nimble.git", .upToNextMajor(from: "9.0.0")),
-    .package(url: "https://github.com/realm/SwiftLint.git", .upToNextMajor(from: "0.52.2"))
   ],
   targets: [
     .target(
       name: "SwiftDown",
       dependencies: ["Down"],
       exclude: ["../../SwiftDownDemo"],
-      resources: [.copy("Resources/Themes")],
-      plugins: [.plugin(name: "SwiftLintPlugin", package: "SwiftLint")]
+      resources: [.copy("Resources/Themes")]
     ),
     .testTarget(
       name: "SwiftDownTests",
