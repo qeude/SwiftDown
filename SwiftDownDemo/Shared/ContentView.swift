@@ -24,12 +24,10 @@ struct ContentView: View {
         self.focusedField = .field
       }
       TextEditor(text: $text)
-      HStack {
-        Button {
-          self.text = ""
-        } label: {
-          Text("Clear")
-        }
+      Button {
+        self.text = ""
+      } label: {
+        Text("Clear")
       }
     }
   }
