@@ -157,17 +157,7 @@ public struct SwiftDownEditor: UIViewRepresentable {
     }
 
     public func updateNSView(_ nsView: SwiftDown, context: Context) {
-      context.coordinator.cancellable?.cancel()
-      context.coordinator.cancellable = Timer
-        .publish(every: debounceTime, on: .current, in: .default)
-        .autoconnect()
-        .first()
-        .sink { _ in
-          let selectedRanges = nsView.selectedRanges
-          nsView.text = text
-          nsView.applyStyles()
-          nsView.selectedRanges = selectedRanges
-        }
+      context.coordinator.subject.send((nsView, text))
     }
 
     public func makeCoordinator() -> Coordinator {
@@ -178,11 +168,11 @@ public struct SwiftDownEditor: UIViewRepresentable {
   // MARK: - SwiftDownEditor Coordinator macOS
   extension SwiftDownEditor {
     // MARK: - Coordinator
-    public class Coordinator: NSObject, NSTextViewDelegate {
+    public class Coordinator: StyleCoordinator, NSTextViewDelegate {
       var parent: SwiftDownEditor
-      var cancellable: Cancellable?
       init(_ parent: SwiftDownEditor) {
         self.parent = parent
+        super.init()
       }
 
       public func textDidChange(_ notification: Notification) {
@@ -196,6 +186,21 @@ public struct SwiftDownEditor: UIViewRepresentable {
   }
 #endif
 
+public class StyleCoordinator: NSObject {
+  var subject = PassthroughSubject<(SwiftDown, String), Never>()
+  var subscription: AnyCancellable
+  override init() {
+    self.subscription = self.subject.debounce(for: .seconds(0.3), scheduler: RunLoop.main).sink { (nsView, text) in
+      let selectedRanges = nsView.selectedRanges
+      nsView.text = text
+      nsView.highlighter?.applyStyles()
+      nsView.selectedRanges = selectedRanges
+    }
+  }
+  func send(_ swiftDown: SwiftDown, _ text: String) {
+    self.subject.send((swiftDown, text))
+  }
+}
 // MARK: - Common Modifiers
 extension SwiftDownEditor {
   public func insetsSize(_ size: CGFloat) -> Self {
