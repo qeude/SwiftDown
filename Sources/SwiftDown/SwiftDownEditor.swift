@@ -60,17 +60,7 @@ public struct SwiftDownEditor: UIViewRepresentable {
     }
 
   public func updateUIView(_ uiView: SwiftDown, context: Context) {
-    context.coordinator.cancellable?.cancel()
-    context.coordinator.cancellable = Timer
-      .publish(every: debounceTime, on: .current, in: .default)
-      .autoconnect()
-      .first()
-      .sink { _ in
-        let selectedRange = uiView.selectedRange
-        uiView.text = text
-        uiView.highlighter?.applyStyles()
-        uiView.selectedRange = selectedRange
-      }
+    context.coordinator.send(uiView, text)
   }
 
     public func makeCoordinator() -> Coordinator {
@@ -80,12 +70,12 @@ public struct SwiftDownEditor: UIViewRepresentable {
 
   // MARK: - SwiftDownEditor iOS Coordinator
   extension SwiftDownEditor {
-    public class Coordinator: NSObject, UITextViewDelegate {
-      var cancellable: Cancellable?
+    public class Coordinator: StyleCoordinator, UITextViewDelegate {
       var parent: SwiftDownEditor
 
       init(_ parent: SwiftDownEditor) {
         self.parent = parent
+        super.init()
       }
 
       public func textViewDidChange(_ textView: UITextView) {
@@ -157,7 +147,7 @@ public struct SwiftDownEditor: UIViewRepresentable {
     }
 
     public func updateNSView(_ nsView: SwiftDown, context: Context) {
-      context.coordinator.subject.send((nsView, text))
+      context.coordinator.send(nsView, text)
     }
 
     public func makeCoordinator() -> Coordinator {
@@ -187,8 +177,8 @@ public struct SwiftDownEditor: UIViewRepresentable {
 #endif
 
 public class StyleCoordinator: NSObject {
-  var subject = PassthroughSubject<(SwiftDown, String), Never>()
-  var subscription: AnyCancellable
+  private var subject = PassthroughSubject<(SwiftDown, String), Never>()
+  private var subscription: AnyCancellable
   override init() {
     self.subscription = self.subject.debounce(for: .seconds(0.3), scheduler: RunLoop.main).sink { (nsView, text) in
       let selectedRanges = nsView.selectedRanges
