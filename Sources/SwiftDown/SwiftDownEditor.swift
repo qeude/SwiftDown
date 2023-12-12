@@ -64,13 +64,20 @@ public struct SwiftDownEditor: UIViewRepresentable {
   }
 
     public func makeCoordinator() -> Coordinator {
-      Coordinator(self, debounceTime)
+      Coordinator(self)
     }
   }
 
   // MARK: - SwiftDownEditor iOS Coordinator
   extension SwiftDownEditor {
     public class Coordinator: StyleCoordinator, UITextViewDelegate {
+      var parent: SwiftDownEditor
+
+      init(_ parent: SwiftDownEditor) {
+        self.parent = parent
+        super.init()
+      }
+
       public func textViewDidChange(_ textView: UITextView) {
         guard textView.markedTextRange == nil else { return }
 
@@ -144,7 +151,7 @@ public struct SwiftDownEditor: UIViewRepresentable {
     }
 
     public func makeCoordinator() -> Coordinator {
-      Coordinator(self, debounceTime)
+      Coordinator(self)
     }
   }
 
@@ -152,6 +159,12 @@ public struct SwiftDownEditor: UIViewRepresentable {
   extension SwiftDownEditor {
     // MARK: - Coordinator
     public class Coordinator: StyleCoordinator, NSTextViewDelegate {
+      var parent: SwiftDownEditor
+      init(_ parent: SwiftDownEditor) {
+        self.parent = parent
+        super.init()
+      }
+
       public func textDidChange(_ notification: Notification) {
         guard let textView = notification.object as? NSTextView else {
           return
@@ -164,12 +177,10 @@ public struct SwiftDownEditor: UIViewRepresentable {
 #endif
 
 public class StyleCoordinator: NSObject {
-  var parent: SwiftDownEditor
   private var subject = PassthroughSubject<(SwiftDown, String), Never>()
   private var subscription: AnyCancellable
-  init(_ parent: SwiftDownEditor, _ debounceTime: CGFloat) {
-    self.parent = parent
-    self.subscription = self.subject.debounce(for: .seconds(debounceTime), scheduler: RunLoop.main).sink { (nsView, text) in
+  override init() {
+    self.subscription = self.subject.debounce(for: .seconds(0.3), scheduler: RunLoop.main).sink { (nsView, text) in
       let selectedRanges = nsView.selectedRanges
       nsView.text = text
       nsView.highlighter?.applyStyles()
