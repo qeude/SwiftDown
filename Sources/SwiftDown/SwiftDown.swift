@@ -47,16 +47,6 @@
     public override func willMove(toSuperview newSuperview: UIView?) {
       self.highlighter = SwiftDownHighligther(textView: self)
     }
-    var selectedRanges: [NSRange] {
-      get {
-        return [self.selectedRange]
-      }
-      set {
-        if !newValue.isEmpty {
-          self.selectedRange = newValue[0]
-        }
-      }
-    }
   }
 #else
   import AppKit
