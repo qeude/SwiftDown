@@ -16,6 +16,8 @@ struct ContentView: View {
     VStack {
       SwiftDownEditor(text: $text, onTextChange: { text in
         print("onTextChange")
+      }, onSelectionChange: { rng in
+        print("onSelectionChange", rng)
       })
       .focused($focusedField, equals: .field)
       .onAppear {

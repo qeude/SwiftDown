@@ -26,14 +26,17 @@ public struct SwiftDownEditor: UIViewRepresentable {
     private(set) var textAlignment: TextAlignment = .leading
 
     public var onTextChange: (String) -> Void = { _ in }
+    public var onSelectionChange: (NSRange) -> Void = { _ in }
     let engine = MarkdownEngine()
 
     public init(
       text: Binding<String>,
-      onTextChange: @escaping (String) -> Void = { _ in }
+      onTextChange: @escaping (String) -> Void = { _ in },
+      onSelectionChange: @escaping (NSRange) -> Void = { _ in }
     ) {
       _text = text
       self.onTextChange = onTextChange
+      self.onSelectionChange = onSelectionChange
     }
 
     public func makeUIView(context: Context) -> SwiftDown {
@@ -84,6 +87,11 @@ public struct SwiftDownEditor: UIViewRepresentable {
           self.parent.text = textView.text
         }
       }
+
+      public func textViewDidChangeSelection(_ textView: UITextView) {
+        guard textView.markedTextRange == nil else { return }
+        self.parent.onSelectionChange(textView.selectedRange)
+      }
     }
   }
 
@@ -127,13 +135,16 @@ public struct SwiftDownEditor: UIViewRepresentable {
     private(set) var insetsSize: CGFloat = 0
 
     public var onTextChange: (String) -> Void = { _ in }
+    public var onSelectionChange: (NSRange) -> Void = { _ in }
 
     public init(
       text: Binding<String>,
-      onTextChange: @escaping (String) -> Void = { _ in }
+      onTextChange: @escaping (String) -> Void = { _ in },
+      onSelectionChange: @escaping (NSRange) -> Void = { _ in }
     ) {
       _text = text
       self.onTextChange = onTextChange
+      self.onSelectionChange = onSelectionChange
     }
 
     public func makeNSView(context: Context) -> SwiftDown {
@@ -172,6 +183,13 @@ public struct SwiftDownEditor: UIViewRepresentable {
         }
 
         self.parent.text = textView.string
+      }
+
+      public func textViewDidChangeSelection(_ notification: Notification) {
+        guard let textView = notification.object as? NSTextView else {
+          return
+        }
+        self.parent.onSelectionChange(textView.selectedRange())
       }
     }
   }
