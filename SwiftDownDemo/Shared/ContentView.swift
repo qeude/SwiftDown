@@ -19,6 +19,7 @@ struct ContentView: View {
       }, onSelectionChange: { rng in
         print("onSelectionChange", rng)
       })
+      .debounceTime(0.3)
       .focused($focusedField, equals: .field)
       .onAppear {
         self.focusedField = .field

@@ -7,10 +7,12 @@
 
 import Down
 import SwiftUI
+import Combine
 
 #if os(iOS)
   // MARK: - SwiftDownEditor iOS
 public struct SwiftDownEditor: UIViewRepresentable {
+  private var debounceTime = 0.3
   @Binding var text: String {
     didSet {
       onTextChange(text)
@@ -56,15 +58,23 @@ public struct SwiftDownEditor: UIViewRepresentable {
       swiftDown.tintColor = theme.tintColor
       swiftDown.textColor = theme.tintColor
       swiftDown.text = text
+
       return swiftDown
     }
 
-    public func updateUIView(_ uiView: SwiftDown, context: Context) {
-      let selectedRange = uiView.selectedRange
-      uiView.text = text
-      uiView.highlighter?.applyStyles()
-      uiView.selectedRange = selectedRange
-    }
+  public func updateUIView(_ uiView: SwiftDown, context: Context) {
+    context.coordinator.cancellable?.cancel()
+    context.coordinator.cancellable = Timer
+      .publish(every: debounceTime, on: .current, in: .default)
+      .autoconnect()
+      .first()
+      .sink { _ in
+        let selectedRange = uiView.selectedRange
+        uiView.text = text
+        uiView.highlighter?.applyStyles()
+        uiView.selectedRange = selectedRange
+      }
+  }
 
     public func makeCoordinator() -> Coordinator {
       Coordinator(self)
@@ -74,6 +84,7 @@ public struct SwiftDownEditor: UIViewRepresentable {
   // MARK: - SwiftDownEditor iOS Coordinator
   extension SwiftDownEditor {
     public class Coordinator: NSObject, UITextViewDelegate {
+      var cancellable: Cancellable?
       var parent: SwiftDownEditor
 
       init(_ parent: SwiftDownEditor) {
@@ -124,6 +135,7 @@ public struct SwiftDownEditor: UIViewRepresentable {
 #else
   // MARK: - SwiftDownEditor macOS
   public struct SwiftDownEditor: NSViewRepresentable {
+    private var debounceTime = 0.3
     @Binding var text: String {
       didSet {
         onTextChange(text)
@@ -156,10 +168,17 @@ public struct SwiftDownEditor: UIViewRepresentable {
     }
 
     public func updateNSView(_ nsView: SwiftDown, context: Context) {
-      let selectedRanges = nsView.selectedRanges
-      nsView.text = text
-      nsView.applyStyles()
-      nsView.selectedRanges = selectedRanges
+      context.coordinator.cancellable?.cancel()
+      context.coordinator.cancellable = Timer
+        .publish(every: debounceTime, on: .current, in: .default)
+        .autoconnect()
+        .first()
+        .sink { _ in
+          let selectedRanges = nsView.selectedRanges
+          nsView.text = text
+          nsView.applyStyles()
+          nsView.selectedRanges = selectedRanges
+        }
     }
 
     public func makeCoordinator() -> Coordinator {
@@ -172,7 +191,7 @@ public struct SwiftDownEditor: UIViewRepresentable {
     // MARK: - Coordinator
     public class Coordinator: NSObject, NSTextViewDelegate {
       var parent: SwiftDownEditor
-
+      var cancellable: Cancellable?
       init(_ parent: SwiftDownEditor) {
         self.parent = parent
       }
@@ -214,4 +233,10 @@ extension SwiftDownEditor {
     editor.isEditable = isEditable
     return editor
   }
+
+  public func debounceTime(_ debounceTime: Double) -> Self {
+     var editor = self
+     editor.debounceTime = debounceTime
+     return editor
+   }
 }
