@@ -47,7 +47,7 @@ public struct SwiftDownEditor: UIViewRepresentable {
       swiftDown.storage.applyMarkdown = { m in Theme.applyMarkdown(markdown: m, with: self.theme) }
       swiftDown.storage.applyBody = { Theme.applyBody(with: self.theme) }
       swiftDown.delegate = context.coordinator
-      swiftDown.isEditable = true
+      swiftDown.isEditable = isEditable
       swiftDown.isScrollEnabled = true
       swiftDown.keyboardType = keyboardType
       swiftDown.autocapitalizationType = autocapitalizationType
