@@ -246,7 +246,7 @@ extension UITextView {
   }
 
   /// Validate if the selected text range contains a link
-  func containsLink() -> Bool {
+  var containsLink: Bool {
     guard let selectedTextRange = self.selectedTextRange,
       let selectedText = self.text(in: selectedTextRange) else {
       return false
