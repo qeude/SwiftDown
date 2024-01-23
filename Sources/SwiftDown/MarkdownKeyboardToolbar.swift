@@ -8,18 +8,6 @@
 #if os(iOS)
 import UIKit
 
-/// Extends the SwiftDown UITextView to add a keyboard toolbar
-/// Toolbar buttons insert common Markdown syntax:
-/// - H1 heading text
-/// - H2 heading text
-/// - H3 heading text
-/// - Bold text
-/// - Italicized text
-/// - Unordered lists
-/// - Ordered lists
-/// - Block quotes
-/// - Links
-/// - Code Blocks
 extension SwiftDown {
   /// Adds a keyboard toolbar for quick markdown syntax
   /// Adds the selected markdown at the cursor's position
@@ -27,25 +15,16 @@ extension SwiftDown {
     let toolbar = UIToolbar()
     toolbar.barStyle = UIBarStyle.default
     toolbar.isTranslucent = true
-    let h1Button = getKeyboardTextButton(title: "H1", action: #selector(self.h1Action))
-    let h2Button = getKeyboardTextButton(title: "H2", action: #selector(self.h2Action))
-    let h3Button = getKeyboardTextButton(title: "H3", action: #selector(self.h3Action))
-    let boldButton = getKeyboardImageButton(icon: "bold", action: #selector(self.boldAction))
-    let italicizeButton = getKeyboardImageButton(icon: "italic", action: #selector(self.italicizeAction))
-    let unorderedListButton = getKeyboardImageButton(
-      icon: "list.bullet",
-      action: #selector(self.unorderedListAction)
-    )
-    let orderedListButton = getKeyboardImageButton(
-      icon: "list.number",
-      action: #selector(self.orderedListAction)
-    )
-    let blockQuoteButton = getKeyboardImageButton(
-      icon: "quote.closing",
-      action: #selector(self.blockQuoteAction)
-    )
-    let linkButton = getKeyboardImageButton(icon: "link", action: #selector(self.linkAction))
-    let codeBlockButton = getKeyboardImageButton(icon: "curlybraces", action: #selector(self.codeBlockAction))
+    let h1Button = keyboardButton(title: "H1", action: #selector(self.h1Action))
+    let h2Button = keyboardButton(title: "H2", action: #selector(self.h2Action))
+    let h3Button = keyboardButton(title: "H3", action: #selector(self.h3Action))
+    let boldButton = keyboardButton(icon: "bold", action: #selector(self.boldAction))
+    let italicizeButton = keyboardButton(icon: "italic", action: #selector(self.italicizeAction))
+    let unorderedListButton = keyboardButton(icon: "list.bullet",action: #selector(self.unorderedListAction))
+    let orderedListButton = keyboardButton(icon: "list.number",action: #selector(self.orderedListAction))
+    let blockQuoteButton = keyboardButton(icon: "quote.closing",action: #selector(self.blockQuoteAction))
+    let linkButton = keyboardButton(icon: "link", action: #selector(self.linkAction))
+    let codeBlockButton = keyboardButton(icon: "curlybraces", action: #selector(self.codeBlockAction))
     toolbar.setItems(
       [
         h1Button,
@@ -66,8 +45,8 @@ extension SwiftDown {
     self.inputAccessoryView = toolbar
   }
 
-  private func getKeyboardTextButton(title: String, action: Selector) -> UIBarButtonItem {
-    return UIBarButtonItem(
+  private func keyboardButton(title: String, action: Selector) -> UIBarButtonItem {
+    UIBarButtonItem(
       title: title,
       style: .plain,
       target: self,
@@ -75,8 +54,8 @@ extension SwiftDown {
     )
   }
 
-  private func getKeyboardImageButton(icon: String, action: Selector) -> UIBarButtonItem {
-    return UIBarButtonItem(
+  private func keyboardButton(icon: String, action: Selector) -> UIBarButtonItem {
+    UIBarButtonItem(
       image: UIImage(systemName: icon),
       style: .plain,
       target: self,
@@ -168,13 +147,13 @@ extension SwiftDown {
 
   /// Inserts the link`[]()` tag
   /// If text is selected, it is checked if it contains a link
-  ///   If a link is detected, the selected text is placed inside the parenthesis
-  ///   If a link is not detected, the selected text is placed inside the braces
+  ///   If a link is detected, the selected text is placed inside the braces
+  ///   If a link is not detected, the selected text is placed inside the parenthesis
   /// Moves the cursor into the text bracket or parenthesis as applicable
   @objc private func linkAction() {
     let selectedStart = self.selectedStart
     let selectedEnd = self.selectedEnd
-    if self.containsLink() {
+    if self.containsLink {
       self.text.insert(
         contentsOf: "[](",
         at: self.text.index(self.text.startIndex, offsetBy: selectedStart)
