@@ -11,7 +11,7 @@
   // MARK: - SwiftDown iOS
   public class SwiftDown: UITextView, UITextViewDelegate {
     var storage: Storage = Storage()
-    var highlighter: SwiftDownHighligther?
+    var highlighter: SwiftDownHighlighter?
     var hasKeyboardToolbar: Bool = true
 
     convenience init(frame: CGRect, theme: Theme) {
@@ -49,7 +49,7 @@
     }
 
     public override func willMove(toSuperview newSuperview: UIView?) {
-      self.highlighter = SwiftDownHighligther(textView: self)
+      self.highlighter = SwiftDownHighlighter(textView: self)
     }
   }
 #else
@@ -100,7 +100,7 @@
     }
 
     let engine = MarkdownEngine()
-    var highlighter: SwiftDownHighligther!
+    var highlighter: SwiftDownHighlighter!
 
     var text: String {
       didSet {
@@ -196,7 +196,7 @@
 
     func setupTextView() {
       scrollView.documentView = textView
-      highlighter = SwiftDownHighligther(textView: textView)
+      highlighter = SwiftDownHighlighter(textView: textView)
     }
 
     func applyStyles() {

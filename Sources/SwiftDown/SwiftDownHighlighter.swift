@@ -1,6 +1,6 @@
 //
-//  SwiftDownHighligther.swift
-//  
+//  SwiftDownHighlighter.swift
+//
 //
 //  Created by Quentin Eude on 28/12/2022.
 //
@@ -8,7 +8,7 @@
 #if os(iOS)
 import UIKit
 
-class SwiftDownHighligther {
+class SwiftDownHighlighter {
   weak var textView: UITextView?
 
   /// - param textView: The text view which should be observed and highlighted.
@@ -30,7 +30,7 @@ class SwiftDownHighligther {
 #else
 import AppKit
 
-class SwiftDownHighligther {
+class SwiftDownHighlighter {
   let textView: NSTextView
 
   /// - param textView: The text view which should be observed and highlighted.
