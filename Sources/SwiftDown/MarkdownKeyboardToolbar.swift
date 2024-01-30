@@ -15,6 +15,7 @@ extension SwiftDown {
     let toolbar = UIToolbar()
     toolbar.barStyle = UIBarStyle.default
     toolbar.isTranslucent = true
+    toolbar.barTintColor = UIColor.systemBackground
     let h1Button = keyboardButton(title: "H1", action: #selector(self.h1Action))
     let h2Button = keyboardButton(title: "H2", action: #selector(self.h2Action))
     let h3Button = keyboardButton(title: "H3", action: #selector(self.h3Action))
@@ -42,7 +43,16 @@ extension SwiftDown {
     )
     toolbar.isUserInteractionEnabled = true
     toolbar.sizeToFit()
-    self.inputAccessoryView = toolbar
+    let buttonCount = CGFloat(toolbar.items?.count ?? 0)
+    toolbar.frame = CGRect(x: 0, y: 0, width: 40 * buttonCount, height: toolbar.frame.size.height)
+    let scrollView = UIScrollView(frame:
+      CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: toolbar.frame.size.height)
+    )
+    scrollView.bounds = toolbar.bounds;
+    scrollView.contentSize = toolbar.frame.size;
+    scrollView.backgroundColor = UIColor.systemBackground
+    scrollView.addSubview(toolbar)
+    self.inputAccessoryView = scrollView
   }
 
   private func keyboardButton(title: String, action: Selector) -> UIBarButtonItem {
