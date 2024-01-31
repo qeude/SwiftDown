@@ -13,9 +13,6 @@ extension SwiftDown {
   /// Adds the selected markdown at the cursor's position
   func addKeyboardToolbar() {
     let toolbar = UIToolbar()
-    toolbar.barStyle = UIBarStyle.default
-    toolbar.isTranslucent = true
-    toolbar.barTintColor = UIColor.systemBackground
     let h1Button = keyboardButton(title: "H1", action: #selector(self.h1Action))
     let h2Button = keyboardButton(title: "H2", action: #selector(self.h2Action))
     let h3Button = keyboardButton(title: "H3", action: #selector(self.h3Action))
@@ -43,14 +40,20 @@ extension SwiftDown {
     )
     toolbar.isUserInteractionEnabled = true
     toolbar.sizeToFit()
-    let buttonCount = CGFloat(toolbar.items?.count ?? 0)
-    toolbar.frame = CGRect(x: 0, y: 0, width: 40 * buttonCount, height: toolbar.frame.size.height)
+    toolbar.barStyle = UIBarStyle.default
+    toolbar.isTranslucent = true
+    toolbar.setBackgroundImage(UIImage(), forToolbarPosition: .any, barMetrics: .default)
+    toolbar.backgroundColor = UIColor.secondarySystemBackground
+    let toolbarWidth = max(40 * CGFloat(toolbar.items?.count ?? 0), UIScreen.main.bounds.width)
+    toolbar.frame = CGRect(x: 0, y: 0, width: toolbarWidth, height: toolbar.frame.size.height)
     let scrollView = UIScrollView(frame:
       CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: toolbar.frame.size.height)
     )
-    scrollView.bounds = toolbar.bounds;
-    scrollView.contentSize = toolbar.frame.size;
-    scrollView.backgroundColor = UIColor.systemBackground
+    scrollView.showsHorizontalScrollIndicator = false
+    scrollView.showsVerticalScrollIndicator = false
+    scrollView.bounds = toolbar.bounds
+    scrollView.contentSize = toolbar.frame.size
+    scrollView.backgroundColor = UIColor.secondarySystemBackground
     scrollView.addSubview(toolbar)
     self.inputAccessoryView = scrollView
   }
