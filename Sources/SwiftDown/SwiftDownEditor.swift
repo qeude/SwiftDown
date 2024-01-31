@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  SwiftDownEditor.swift
 //
 //
 //  Created by Quentin Eude on 16/03/2021.
@@ -25,6 +25,7 @@ public struct SwiftDownEditor: UIViewRepresentable {
     private(set) var autocapitalizationType: UITextAutocapitalizationType = .sentences
     private(set) var autocorrectionType: UITextAutocorrectionType = .default
     private(set) var keyboardType: UIKeyboardType = .default
+    private(set) var hasKeyboardToolbar: Bool = true
     private(set) var textAlignment: TextAlignment = .leading
 
     public var onTextChange: (String) -> Void = { _ in }
@@ -50,6 +51,7 @@ public struct SwiftDownEditor: UIViewRepresentable {
       swiftDown.isEditable = isEditable
       swiftDown.isScrollEnabled = true
       swiftDown.keyboardType = keyboardType
+      swiftDown.hasKeyboardToolbar = hasKeyboardToolbar
       swiftDown.autocapitalizationType = autocapitalizationType
       swiftDown.autocorrectionType = autocorrectionType
       swiftDown.textContainerInset = UIEdgeInsets(
@@ -130,6 +132,12 @@ public struct SwiftDownEditor: UIViewRepresentable {
       var new = self
       new.textAlignment = type
       return new
+    }
+
+    public func hasKeyboardToolbar(_ hasKeyboardToolbar: Bool) -> Self {
+      var editor = self
+      editor.hasKeyboardToolbar = hasKeyboardToolbar
+      return editor
     }
   }
 #else

@@ -12,6 +12,7 @@
   public class SwiftDown: UITextView, UITextViewDelegate {
     var storage: Storage = Storage()
     var highlighter: SwiftDownHighlighter?
+    var hasKeyboardToolbar: Bool = true
 
     convenience init(frame: CGRect, theme: Theme) {
       self.init(frame: frame, textContainer: nil)
@@ -19,6 +20,9 @@
       self.backgroundColor = theme.backgroundColor
       self.tintColor = theme.tintColor
       self.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+      if hasKeyboardToolbar {
+        self.addKeyboardToolbar()
+      }
     }
 
     override init(frame: CGRect, textContainer: NSTextContainer?) {
