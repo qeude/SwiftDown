@@ -24,9 +24,9 @@ public class MarkdownEngine {
       let fromIdx = text.utf8.index(text.utf8.startIndex, offsetBy: s)
       let range =
         text.utf8
-        .index(text.utf8.startIndex, offsetBy: e, limitedBy: text.utf8.endIndex)
+        .index(text.utf8.startIndex, offsetBy: max(0, e), limitedBy: text.utf8.endIndex)
         .flatMap {
-          if ($0 < text.utf8.endIndex ) {
+          if ($0 < text.utf8.endIndex && $0 > fromIdx) {
             let range = NSRange(fromIdx...$0, in: text)
             return NSRange(location: range.location + offset, length: range.length)
           } else {
